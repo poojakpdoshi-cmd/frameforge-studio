@@ -32,3 +32,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Interactive multitrack timeline with continuous zoom, clip selection, dragging, and blade split tool.
   - Media browser supporting file ingestion, media metadata probing, and thumbnail caching.
   - Real-time inspector panel for transform properties, blend modes, and opacity adjustments.
+

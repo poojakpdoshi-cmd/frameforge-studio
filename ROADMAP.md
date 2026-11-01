@@ -153,3 +153,4 @@ flowchart TD
 - [ ] **Script-to-Visual Alignment Engine:**
   - Audio transcript ingestion with word-level timestamps.
   - Automatic B-roll, lower-third, and citation graphic placement synchronized to speech cadence.
+

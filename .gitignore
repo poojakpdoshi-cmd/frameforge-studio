@@ -4,10 +4,15 @@ node_modules/
 
 # Build artifacts
 dist/
+dist-electron/
 build/
 out/
 release/
 *.tsbuildinfo
+
+# Fixtures temporary outputs
+tests/fixtures/output/
+tests/fixtures/frames/
 
 # OS files
 .DS_Store
@@ -46,3 +51,4 @@ coverage/
 exports/
 proxies/
 cache/
+

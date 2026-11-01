@@ -51,3 +51,4 @@ describe('FrameForge Engine: FFmpeg Command Builder & Hardware Acceleration', ()
     expect(args).toContain('48000'); // 48kHz audio standard
   });
 });
+

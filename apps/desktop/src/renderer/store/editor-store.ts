@@ -325,9 +325,14 @@ export const useEditorStore = create<EditorState>((set, get) => {
     },
 
     runMCPTool: async (toolName, args) => {
-      const res = await get().mcpServer.handleToolCall({ name: toolName, arguments: args });
+      const res = await get().mcpServer.executeTool(toolName, args);
       set({ sequence: { ...get().sequence } });
-      return res;
+      const text = res.content?.[0]?.text || '';
+      return {
+        success: !res.isError,
+        message: text,
+      };
     },
   };
 });
+

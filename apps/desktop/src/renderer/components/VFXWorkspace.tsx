@@ -71,3 +71,4 @@ export const VFXWorkspace: React.FC = () => {
     </div>
   );
 };
+

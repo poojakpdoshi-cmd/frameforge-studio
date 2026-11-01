@@ -98,3 +98,4 @@ export interface TimelineSequence {
   tracks: TimelineTrack[];
   markers: Marker[];
 }
+

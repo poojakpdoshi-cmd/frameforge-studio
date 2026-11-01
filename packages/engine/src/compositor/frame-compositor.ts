@@ -2,7 +2,7 @@
  * FrameForge Studio: Multi-Track Frame Compositor
  * 
  * Evaluates the timeline sequence DAG at exact playhead time t, sorting visual
- * tracks in ascending order and applying transforms, blend modes, and opacity.
+ * tracks in ascending order and applying transforms, blend modes, filters, and shaders.
  */
 
 import {
@@ -29,9 +29,6 @@ export class FrameCompositor {
     this.shaderPipeline = new ShaderPipeline();
   }
 
-  /**
-   * Maps FrameForge blend modes to HTML5 Canvas globalCompositeOperation
-   */
   private mapBlendMode(mode: BlendMode): GlobalCompositeOperation {
     switch (mode) {
       case 'multiply': return 'multiply';
@@ -51,15 +48,12 @@ export class FrameCompositor {
     }
   }
 
-  /**
-   * Renders the complete timeline at the given playhead time
-   */
   renderFrame(
     sequence: TimelineSequence,
     time: RationalTime,
     context: RenderContext
   ): void {
-    const { ctx, width, height, sourceElements } = context;
+    const { ctx, width, height } = context;
 
     // Clear background to neutral studio black
     ctx.save();
@@ -71,10 +65,9 @@ export class FrameCompositor {
     const activeClips = getClipsAtTime(sequence, time);
     if (activeClips.length === 0) return;
 
-    // Filter to visual tracks only (video & overlay)
+    // Filter to visual tracks only (video & overlay), sorted ascending (V1 -> V2 -> V3)
     const visualTracks = sequence.tracks
       .filter((t) => t.kind === 'video' || t.kind === 'overlay')
-      // Sort lowest index first so higher tracks composite over lower tracks
       .sort((a, b) => b.index - a.index);
 
     for (const track of visualTracks) {
@@ -101,11 +94,18 @@ export class FrameCompositor {
 
     ctx.save();
 
-    // Apply Opacity & Blend Mode
+    // 1. Prepare Pre-Render Filters (Blur, Color Grading) BEFORE drawImage
+    if (clip.effects && clip.effects.length > 0) {
+      this.shaderPipeline.preparePreRenderFilters(ctx, clip.effects);
+    } else {
+      ctx.filter = 'none';
+    }
+
+    // 2. Apply Opacity & Blend Mode
     ctx.globalAlpha = Math.max(0, Math.min(1, clip.transform.opacity));
     ctx.globalCompositeOperation = this.mapBlendMode(clip.blendMode);
 
-    // Transform Matrix: Translation, Rotation, Anchor Point, Scale
+    // 3. Transform Matrix: Translation, Rotation, Anchor Point, Scale
     const centerX = width / 2 + clip.transform.position.x;
     const centerY = height / 2 + clip.transform.position.y;
 
@@ -115,26 +115,31 @@ export class FrameCompositor {
     }
     ctx.scale(clip.transform.scale.x, clip.transform.scale.y);
 
-    // Draw element or procedural placeholder
     const drawW = element ? (element as any).videoWidth || (element as any).width || width : width;
     const drawH = element ? (element as any).videoHeight || (element as any).height || height : height;
     const anchorX = -drawW * clip.transform.anchor.x;
     const anchorY = -drawH * clip.transform.anchor.y;
 
+    // 4. Draw Media Element or High-Visibility Procedural Canvas
     if (element) {
-      // Seek video element if not playing
       if (element instanceof HTMLVideoElement && Math.abs(element.currentTime - sourceCurrent.toSeconds()) > 0.1) {
         element.currentTime = sourceCurrent.toSeconds();
       }
       ctx.drawImage(element, anchorX, anchorY, drawW, drawH);
     } else {
-      // High-visibility procedural fallback pattern (SMPTE gradient)
       this.drawProceduralPlaceholder(ctx, anchorX, anchorY, drawW, drawH, clip.name, clip.color);
     }
 
-    // Apply Shader Effects if any are attached
+    // 5. Apply Post-Render Pixel Shaders (Grain, Vignette, Chromatic Aberration)
     if (clip.effects && clip.effects.length > 0) {
-      this.shaderPipeline.applyEffects(ctx, anchorX, anchorY, drawW, drawH, clip.effects);
+      this.shaderPipeline.applyPostRenderShaders(
+        ctx,
+        centerX + anchorX,
+        centerY + anchorY,
+        drawW * clip.transform.scale.x,
+        drawH * clip.transform.scale.y,
+        clip.effects
+      );
     }
 
     ctx.restore();
@@ -152,14 +157,12 @@ export class FrameCompositor {
     ctx.fillStyle = color || '#1e293b';
     ctx.fillRect(x, y, w, h);
 
-    // Studio grid accent
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, w, h);
 
-    // Label
     ctx.fillStyle = '#f8fafc';
-    ctx.font = 'bold 24px Inter, system-ui, sans-serif';
+    ctx.font = 'bold 28px Inter, system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(name, x + w / 2, y + h / 2);

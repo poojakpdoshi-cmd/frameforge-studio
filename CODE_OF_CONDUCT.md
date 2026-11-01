@@ -52,3 +52,4 @@ an individual is officially representing the community in public spaces.
 
 Violations will be addressed through graduated sanctions including private reprimands,
 temporary suspensions, and permanent bans from the community and repositories.
+

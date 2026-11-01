@@ -57,3 +57,4 @@ pnpm run dev
    Every PR modifying `@frameforge/core` or `@frameforge/engine` must include automated unit or integration tests verifying correctness and preventing regressions.
 4. **Format & Lint:**
    Ensure `pnpm lint` passes with zero errors before submitting.
+

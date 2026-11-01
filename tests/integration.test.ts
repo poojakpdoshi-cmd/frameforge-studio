@@ -132,3 +132,4 @@ describe('FrameForge Studio: Stage 1 Master Lifecycle & Subsystem Integration', 
     expect(exportArgs).toContain('48000');
   });
 });
+

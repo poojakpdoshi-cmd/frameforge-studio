@@ -112,3 +112,4 @@ export function getClipsAtTime(sequence: TimelineSequence, time: RationalTime): 
   }
   return active;
 }
+

@@ -58,3 +58,4 @@ To ensure FrameForge Studio can evolve into a native Rust or C++ engine in futur
    - Native file dialogues
    - FFmpeg process orchestrator
    - Hardware capability detection
+

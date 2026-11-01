@@ -121,3 +121,4 @@ export function deserializeFromOTIO(otio: any): TimelineSequence {
 
   return sequence;
 }
+

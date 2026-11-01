@@ -147,3 +147,4 @@ export const ColorWorkspace: React.FC = () => {
     </div>
   );
 };
+

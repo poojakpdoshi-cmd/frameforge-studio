@@ -1,0 +1,293 @@
+{
+  "version": "0.1.0",
+  "created": 1793541794927,
+  "assets": [
+    {
+      "id": "asset_real_v1",
+      "name": "video_clip1.mp4",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\video_clip1.mp4",
+      "mediaType": "video",
+      "duration": {
+        "value": "6",
+        "timescale": 1
+      },
+      "width": 1920,
+      "height": 1080,
+      "fps": 24,
+      "dateAdded": 1793541794924
+    },
+    {
+      "id": "asset_real_img",
+      "name": "overlay_graphic.png",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\overlay_graphic.png",
+      "mediaType": "image",
+      "duration": {
+        "value": "10",
+        "timescale": 1
+      },
+      "width": 400,
+      "height": 200,
+      "dateAdded": 1793541794924
+    },
+    {
+      "id": "asset_real_aud",
+      "name": "audio_track.wav",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\audio_track.wav",
+      "mediaType": "audio",
+      "duration": {
+        "value": "10",
+        "timescale": 1
+      },
+      "sampleRate": 48000,
+      "channels": 2,
+      "dateAdded": 1793541794924
+    }
+  ],
+  "sequence": {
+    "OTIO_SCHEMA": "Timeline.1",
+    "name": "Cinema Real Project",
+    "global_start_time": {
+      "OTIO_SCHEMA": "RationalTime.1",
+      "value": 0,
+      "rate": 24
+    },
+    "tracks": {
+      "OTIO_SCHEMA": "Stack.1",
+      "name": "tracks",
+      "children": [
+        {
+          "OTIO_SCHEMA": "Track.1",
+          "name": "V3",
+          "kind": "Video",
+          "children": []
+        },
+        {
+          "OTIO_SCHEMA": "Track.1",
+          "name": "V2",
+          "kind": "Video",
+          "children": [
+            {
+              "OTIO_SCHEMA": "Clip.1",
+              "name": "Logo Overlay",
+              "source_range": {
+                "OTIO_SCHEMA": "TimeRange.1",
+                "start_time": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 0,
+                  "rate": 1
+                },
+                "duration": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 4,
+                  "rate": 1
+                }
+              },
+              "metadata": {
+                "frameforge": {
+                  "assetId": "asset_real_img",
+                  "trackId": "track_video_1_pyhsf",
+                  "speed": 1,
+                  "volume": 1,
+                  "pan": 0,
+                  "blendMode": "normal",
+                  "transform": {
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "scale": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "rotation": 0,
+                    "anchor": {
+                      "x": 0.5,
+                      "y": 0.5
+                    },
+                    "opacity": 1
+                  },
+                  "effects": [],
+                  "timeline_start": {
+                    "value": 1,
+                    "rate": 1
+                  }
+                }
+              }
+            },
+            {
+              "OTIO_SCHEMA": "Clip.1",
+              "name": "Main Video Track (Part 2)",
+              "source_range": {
+                "OTIO_SCHEMA": "TimeRange.1",
+                "start_time": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 3,
+                  "rate": 1
+                },
+                "duration": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 4,
+                  "rate": 1
+                }
+              },
+              "metadata": {
+                "frameforge": {
+                  "assetId": "asset_real_v1",
+                  "trackId": "track_video_1_pyhsf",
+                  "speed": 1,
+                  "volume": 1,
+                  "pan": 0,
+                  "blendMode": "normal",
+                  "transform": {
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "scale": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "rotation": 0,
+                    "anchor": {
+                      "x": 0.5,
+                      "y": 0.5
+                    },
+                    "opacity": 1
+                  },
+                  "effects": [],
+                  "timeline_start": {
+                    "value": 5,
+                    "rate": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "OTIO_SCHEMA": "Track.1",
+          "name": "V1",
+          "kind": "Video",
+          "children": [
+            {
+              "OTIO_SCHEMA": "Clip.1",
+              "name": "Main Video Track",
+              "source_range": {
+                "OTIO_SCHEMA": "TimeRange.1",
+                "start_time": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 0,
+                  "rate": 1
+                },
+                "duration": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 3,
+                  "rate": 1
+                }
+              },
+              "metadata": {
+                "frameforge": {
+                  "assetId": "asset_real_v1",
+                  "trackId": "track_video_2_0kp13",
+                  "speed": 1,
+                  "volume": 1,
+                  "pan": 0,
+                  "blendMode": "normal",
+                  "transform": {
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "scale": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "rotation": 0,
+                    "anchor": {
+                      "x": 0.5,
+                      "y": 0.5
+                    },
+                    "opacity": 1
+                  },
+                  "effects": [],
+                  "timeline_start": {
+                    "value": 0,
+                    "rate": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "OTIO_SCHEMA": "Track.1",
+          "name": "A1",
+          "kind": "Audio",
+          "children": [
+            {
+              "OTIO_SCHEMA": "Clip.1",
+              "name": "Synchronized Stereo Audio",
+              "source_range": {
+                "OTIO_SCHEMA": "TimeRange.1",
+                "start_time": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 0,
+                  "rate": 1
+                },
+                "duration": {
+                  "OTIO_SCHEMA": "RationalTime.1",
+                  "value": 10,
+                  "rate": 1
+                }
+              },
+              "metadata": {
+                "frameforge": {
+                  "assetId": "asset_real_aud",
+                  "trackId": "track_audio_3_9wb5f",
+                  "speed": 1,
+                  "volume": 1,
+                  "pan": 0,
+                  "blendMode": "normal",
+                  "transform": {
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "scale": {
+                      "x": 1,
+                      "y": 1
+                    },
+                    "rotation": 0,
+                    "anchor": {
+                      "x": 0.5,
+                      "y": 0.5
+                    },
+                    "opacity": 1
+                  },
+                  "effects": [],
+                  "timeline_start": {
+                    "value": 0,
+                    "rate": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "OTIO_SCHEMA": "Track.1",
+          "name": "A2",
+          "kind": "Audio",
+          "children": []
+        }
+      ]
+    },
+    "metadata": {
+      "frameforge": {
+        "width": 1920,
+        "height": 1080,
+        "version": "0.1.0-alpha"
+      }
+    }
+  }
+}

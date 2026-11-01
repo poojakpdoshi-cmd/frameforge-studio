@@ -19,3 +19,4 @@ export function clampGain(gain: number, minGain: number = 0, maxGain: number = 2
 export function clampPan(pan: number): number {
   return Math.max(-1.0, Math.min(1.0, pan));
 }
+

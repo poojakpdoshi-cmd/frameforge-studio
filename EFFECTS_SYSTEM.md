@@ -131,3 +131,4 @@ export interface AnimatableProperty<T = number> {
 ```
 
 Evaluating a keyframed value at arbitrary playhead time $t$ executes a binary search over $O(\log K)$ sorted keyframe boundaries followed by Hermite/Cubic-Bézier spline root solving.
+

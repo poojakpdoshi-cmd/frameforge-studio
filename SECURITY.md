@@ -24,3 +24,4 @@ Please include:
 - **Initial Response:** Within 48 hours of report receipt.
 - **Triage & Assessment:** Within 5 business days.
 - **Fix & Public Advisory:** Coordinated release and CVE disclosure upon verified patch deployment.
+

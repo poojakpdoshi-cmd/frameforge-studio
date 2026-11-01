@@ -9,3 +9,4 @@ export * from './model/sequence.js';
 export * from './commands/command.js';
 export * from './commands/clip-commands.js';
 export * from './otio/serializer.js';
+

@@ -121,3 +121,4 @@ See the full license terms in [LICENSE](LICENSE).
 
 **Clean-Room Assurance:**  
 FrameForge Studio is built from first-principles computer graphics mathematics, open standards (W3C WebGPU, Khronos WebGL, ASWF OpenTimelineIO), and documented open-source specifications. It contains zero proprietary code, assets, or trademarks from Adobe Premiere Pro, After Effects, DaVinci Resolve, Final Cut Pro, or CapCut.
+

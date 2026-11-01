@@ -204,3 +204,4 @@ Interactive preview requires sub-16ms latency. The engine uses a layered renderi
 
 - **Tier 1 (Launch Target):** Windows 10 & Windows 11 (x86_64, DirectX 12 / Vulkan via Chromium Angle/WebGPU).
 - **Tier 2 (Post-Launch Expansion):** macOS 13+ (Apple Silicon Metal & x86_64), Ubuntu Linux 22.04+ (Vulkan / VAAPI).
+

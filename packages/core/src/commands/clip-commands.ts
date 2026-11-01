@@ -322,3 +322,4 @@ export class TrimClipCommand implements ICommand<TimelineContext> {
     };
   }
 }
+

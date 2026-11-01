@@ -162,3 +162,4 @@ export class RationalTime {
     return new RationalTime(BigInt(data.value), data.timescale);
   }
 }
+

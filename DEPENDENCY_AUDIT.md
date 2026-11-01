@@ -51,3 +51,4 @@ To prevent inadvertent copyright infringement or license violations:
 3. **Asset & Typography Compliance:**
    - All bundled fonts in templates and titles must be licensed under SIL Open Font License (OFL) or Apache 2.0 (e.g., Inter, JetBrains Mono, Roboto, Outfit).
    - Test footage and sample media included in tests and examples are public domain (CC0) or generated procedurally via algorithmic canvas test patterns (SMPTE color bars, zone plates, sine sweeps).
+

@@ -102,3 +102,4 @@ When initiating a final master render:
    - Valid video and audio stream headers.
    - Non-zero byte length.
    - Total duration matches timeline sequence duration within $\pm 1$ frame tolerance.
+

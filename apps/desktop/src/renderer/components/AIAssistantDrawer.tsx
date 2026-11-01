@@ -219,3 +219,4 @@ export const AIAssistantDrawer: React.FC = () => {
     </div>
   );
 };
+
