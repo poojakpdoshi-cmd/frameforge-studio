@@ -50,6 +50,7 @@ interface EditorState {
   mcpServer: FrameForgeMCPServer;
   compositor: FrameCompositor;
   audioMixer: MultitrackAudioMixer;
+  mediaElements: Map<string, HTMLVideoElement | HTMLImageElement | HTMLCanvasElement>;
 
   // Actions
   setPlayheadTime: (time: RationalTime) => void;
@@ -61,6 +62,11 @@ interface EditorState {
   selectClip: (clipId: string | null) => void;
   setExportModalOpen: (open: boolean) => void;
   setAiDrawerOpen: (open: boolean) => void;
+
+  // Real Project Persistence
+  saveProject: () => Promise<boolean>;
+  openProject: () => Promise<boolean>;
+  setSequence: (seq: TimelineSequence) => void;
 
   // Editing Commands
   importAsset: (asset: MediaAsset) => void;
@@ -207,6 +213,7 @@ export const useEditorStore = create<EditorState>((set, get) => {
     mcpServer: mcp,
     compositor: comp,
     audioMixer: mixer,
+    mediaElements: new Map(),
 
     setPlayheadTime: (time) => set({ playheadTime: time }),
     setPlayheadSeconds: (seconds) => {
@@ -221,8 +228,73 @@ export const useEditorStore = create<EditorState>((set, get) => {
     setExportModalOpen: (open) => set({ exportModalOpen: open }),
     setAiDrawerOpen: (open) => set({ aiDrawerOpen: open }),
 
+    setSequence: (seq: TimelineSequence) => {
+      undoMgr.setContext({ sequence: seq });
+      set({ sequence: seq, selectedClipId: null });
+    },
+
+    saveProject: async () => {
+      const state = get();
+      const projectPayload = {
+        version: '0.1.0',
+        savedAt: Date.now(),
+        assets: state.mediaAssets,
+        sequence: state.sequence,
+      };
+      const jsonStr = JSON.stringify(projectPayload, null, 2);
+
+      if (window.frameforge?.saveProject) {
+        const res = await window.frameforge.saveProject(undefined, jsonStr);
+        return res.success;
+      } else {
+        // Web fallback: download file
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${state.sequence.name.replace(/\s+/g, '_')}.frameforge`;
+        a.click();
+        URL.revokeObjectURL(url);
+        return true;
+      }
+    },
+
+    openProject: async () => {
+      if (window.frameforge?.loadProject) {
+        const res = await window.frameforge.loadProject();
+        if (res.success && res.data) {
+          const payload = res.data;
+          if (payload.sequence) {
+            get().setSequence(payload.sequence);
+            if (payload.assets) {
+              set({ mediaAssets: payload.assets });
+            }
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+
     importAsset: (asset) => {
-      set((state) => ({ mediaAssets: [asset, ...state.mediaAssets] }));
+      // Create and cache actual media elements for realtime canvas rendering
+      const state = get();
+      if (typeof document !== 'undefined') {
+        if (asset.mediaType === 'video') {
+          const video = document.createElement('video');
+          video.src = asset.filePath;
+          video.crossOrigin = 'anonymous';
+          video.preload = 'auto';
+          video.muted = true;
+          state.mediaElements.set(asset.id, video);
+        } else if (asset.mediaType === 'image') {
+          const img = new Image();
+          img.src = asset.filePath;
+          img.crossOrigin = 'anonymous';
+          state.mediaElements.set(asset.id, img);
+        }
+      }
+      set((s) => ({ mediaAssets: [asset, ...s.mediaAssets] }));
     },
 
     addClipToTrack: async (trackId, assetId, startFrame = 0, durationFrames = 120) => {

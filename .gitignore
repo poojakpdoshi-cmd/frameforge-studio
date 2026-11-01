@@ -48,6 +48,9 @@ coverage/
 .turbo/
 
 # Project temporary export scratch
+.user-data/
+apps/.user-data/
+acceptance_evidence/*.mp4
 exports/
 proxies/
 cache/

@@ -1,0 +1,146 @@
+{
+  "version": "0.1.0",
+  "savedAt": 1793544666789,
+  "sequence": {
+    "id": "seq_master_acceptance",
+    "name": "FrameForge Studio Acceptance Project",
+    "fps": 24,
+    "width": 1920,
+    "height": 1080,
+    "tracks": [
+      {
+        "id": "v1",
+        "name": "V1",
+        "kind": "video",
+        "index": 0,
+        "clips": [
+          {
+            "id": "c1",
+            "assetId": "asset_v1",
+            "timelineRange": {
+              "start": {
+                "value": 0,
+                "timescale": 24
+              },
+              "duration": {
+                "value": 132,
+                "timescale": 24
+              }
+            },
+            "effects": [
+              {
+                "id": "fx1",
+                "effectType": "vignette",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "c2",
+            "assetId": "asset_v2",
+            "timelineRange": {
+              "start": {
+                "value": 108,
+                "timescale": 24
+              },
+              "duration": {
+                "value": 132,
+                "timescale": 24
+              }
+            },
+            "effects": [
+              {
+                "id": "fx2",
+                "effectType": "color_grade",
+                "enabled": true
+              },
+              {
+                "id": "fx3",
+                "effectType": "film_grain",
+                "enabled": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "v2",
+        "name": "V2",
+        "kind": "video",
+        "index": 1,
+        "clips": [
+          {
+            "id": "c3",
+            "assetId": "asset_img",
+            "timelineRange": {
+              "start": {
+                "value": 0,
+                "timescale": 24
+              },
+              "duration": {
+                "value": 240,
+                "timescale": 24
+              }
+            },
+            "transform": {
+              "position": {
+                "x": 80,
+                "y": 80
+              },
+              "scale": {
+                "x": 1,
+                "y": 1
+              },
+              "opacity": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "a1",
+        "name": "A1",
+        "kind": "audio",
+        "index": 2,
+        "clips": [
+          {
+            "id": "c4",
+            "assetId": "asset_a1",
+            "timelineRange": {
+              "start": {
+                "value": 0,
+                "timescale": 24
+              },
+              "duration": {
+                "value": 240,
+                "timescale": 24
+              }
+            },
+            "volume": 1
+          }
+        ]
+      }
+    ]
+  },
+  "assets": [
+    {
+      "id": "asset_v1",
+      "filePath": "C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/tests/fixtures/media/video_clip1.mp4",
+      "mediaType": "video"
+    },
+    {
+      "id": "asset_v2",
+      "filePath": "C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/tests/fixtures/media/video_clip2.mp4",
+      "mediaType": "video"
+    },
+    {
+      "id": "asset_img",
+      "filePath": "C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/tests/fixtures/media/overlay_graphic.png",
+      "mediaType": "image"
+    },
+    {
+      "id": "asset_a1",
+      "filePath": "C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/tests/fixtures/media/audio_track.wav",
+      "mediaType": "audio"
+    }
+  ]
+}

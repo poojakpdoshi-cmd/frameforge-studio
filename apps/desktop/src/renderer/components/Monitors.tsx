@@ -22,6 +22,7 @@ export const Monitors: React.FC = () => {
     togglePlay,
     compositor,
     selectedClipId,
+    mediaElements,
   } = useEditorStore();
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -38,9 +39,9 @@ export const Monitors: React.FC = () => {
       ctx,
       width: canvas.width,
       height: canvas.height,
-      sourceElements: new Map(),
+      sourceElements: mediaElements,
     });
-  }, [sequence, playheadTime, compositor]);
+  }, [sequence, playheadTime, compositor, mediaElements]);
 
   // Real-time Playback Loop (60 FPS)
   useEffect(() => {

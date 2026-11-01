@@ -27,3 +27,4 @@ describe('FrameForge Desktop: Electron Shell Verification', () => {
     expect(preloadContent).toContain('probeMedia');
   });
 });
+

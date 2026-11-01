@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "created": 1793541794927,
+  "created": 1793544753938,
   "assets": [
     {
       "id": "asset_real_v1",
@@ -14,7 +14,7 @@
       "width": 1920,
       "height": 1080,
       "fps": 24,
-      "dateAdded": 1793541794924
+      "dateAdded": 1793544753935
     },
     {
       "id": "asset_real_img",
@@ -27,7 +27,7 @@
       },
       "width": 400,
       "height": 200,
-      "dateAdded": 1793541794924
+      "dateAdded": 1793544753935
     },
     {
       "id": "asset_real_aud",
@@ -40,7 +40,7 @@
       },
       "sampleRate": 48000,
       "channels": 2,
-      "dateAdded": 1793541794924
+      "dateAdded": 1793544753935
     }
   ],
   "sequence": {
@@ -85,7 +85,7 @@
               "metadata": {
                 "frameforge": {
                   "assetId": "asset_real_img",
-                  "trackId": "track_video_1_pyhsf",
+                  "trackId": "track_video_1_m3vw1",
                   "speed": 1,
                   "volume": 1,
                   "pan": 0,
@@ -133,7 +133,7 @@
               "metadata": {
                 "frameforge": {
                   "assetId": "asset_real_v1",
-                  "trackId": "track_video_1_pyhsf",
+                  "trackId": "track_video_1_m3vw1",
                   "speed": 1,
                   "volume": 1,
                   "pan": 0,
@@ -188,7 +188,7 @@
               "metadata": {
                 "frameforge": {
                   "assetId": "asset_real_v1",
-                  "trackId": "track_video_2_0kp13",
+                  "trackId": "track_video_2_t30hg",
                   "speed": 1,
                   "volume": 1,
                   "pan": 0,
@@ -243,7 +243,7 @@
               "metadata": {
                 "frameforge": {
                   "assetId": "asset_real_aud",
-                  "trackId": "track_audio_3_9wb5f",
+                  "trackId": "track_audio_3_ky1gy",
                   "speed": 1,
                   "volume": 1,
                   "pan": 0,

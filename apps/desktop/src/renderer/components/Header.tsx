@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Film,
   Undo2,
   Redo2,
+  Save,
+  FolderOpen,
   Magnet,
   Sparkles,
   Download,
@@ -24,10 +26,37 @@ export const Header: React.FC = () => {
     canRedo,
     undo,
     redo,
+    saveProject,
+    openProject,
     setExportModalOpen,
     aiDrawerOpen,
     setAiDrawerOpen,
   } = useEditorStore();
+
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveProject();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
+        e.preventDefault();
+        openProject();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          redo();
+        } else {
+          undo();
+        }
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+        e.preventDefault();
+        redo();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [saveProject, openProject, undo, redo]);
 
   const timecode = playheadTime.toSMPTE(sequence.fps);
 
@@ -79,6 +108,26 @@ export const Header: React.FC = () => {
             className="p-1.5 rounded hover:bg-studio-800 text-slate-300 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
           >
             <Redo2 className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Project Persistence: Save / Open */}
+        <div className="flex items-center space-x-1 pl-3 border-l border-studio-750">
+          <button
+            onClick={() => saveProject()}
+            title="Save Project (Ctrl+S)"
+            className="flex items-center space-x-1 px-2 py-1 rounded hover:bg-studio-800 text-slate-300 hover:text-white transition-colors text-xs"
+          >
+            <Save className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden sm:inline">Save</span>
+          </button>
+          <button
+            onClick={() => openProject()}
+            title="Open Project (Ctrl+O)"
+            className="flex items-center space-x-1 px-2 py-1 rounded hover:bg-studio-800 text-slate-300 hover:text-white transition-colors text-xs"
+          >
+            <FolderOpen className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Open</span>
           </button>
         </div>
       </div>

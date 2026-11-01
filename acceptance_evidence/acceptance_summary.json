@@ -1,0 +1,132 @@
+{
+  "timestamp": "2026-11-01T14:51:14.538Z",
+  "platform": "win32",
+  "arch": "x64",
+  "nodeVersion": "v24.22.1",
+  "electronVersion": "45.2.1",
+  "chromeVersion": "156.0.8078.75",
+  "totalTests": 21,
+  "passedTests": 21,
+  "failedTests": 0,
+  "tests": [
+    {
+      "name": "Desktop Application Window Opens",
+      "passed": true,
+      "details": "Title: \"FrameForge Studio — Professional NLE & VFX\""
+    },
+    {
+      "name": "Preload Bridge & Typed IPC Initialized",
+      "passed": true,
+      "details": "APIs: openMediaDialog, saveExportDialog, probeMedia, exportRender, saveProject, loadProject, platform"
+    },
+    {
+      "name": "Probe Video Clip 1 (H.264 1080p)",
+      "passed": true,
+      "details": "Duration: 6.000000s"
+    },
+    {
+      "name": "Probe Video Clip 2 (SMPTE Color Bars)",
+      "passed": true,
+      "details": "Duration: 6.000000s"
+    },
+    {
+      "name": "Probe Image Overlay (PNG RGBA)",
+      "passed": true,
+      "details": "Resolution: 400x200"
+    },
+    {
+      "name": "Probe Audio Track (PCM WAV 48kHz)",
+      "passed": true,
+      "details": "Sample Rate: 48000Hz"
+    },
+    {
+      "name": "Real FFmpeg Production Master Render via IPC",
+      "passed": true,
+      "details": "Duration: 8.63s, Size: 36.91 MB"
+    },
+    {
+      "name": "FFprobe Duration Accuracy (10.0s)",
+      "passed": true,
+      "details": "Actual: 10.00s"
+    },
+    {
+      "name": "FFprobe Video Resolution (1920x1080 Full HD)",
+      "passed": true,
+      "details": "1920x1080"
+    },
+    {
+      "name": "FFprobe Video Frame Rate (24 fps)",
+      "passed": true,
+      "details": "Frame Rate: 24/1"
+    },
+    {
+      "name": "FFprobe Video Codec (H.264 High Profile)",
+      "passed": true,
+      "details": "Codec: h264"
+    },
+    {
+      "name": "FFprobe Audio Stream Integrity (48kHz Stereo AAC)",
+      "passed": true,
+      "details": "48000Hz, 2 Channels, aac"
+    },
+    {
+      "name": "Frame Extraction @ 2.0s (Clip 1 + Vignette + Graphic Overlay)",
+      "passed": true,
+      "details": "Size: 560.0 KB"
+    },
+    {
+      "name": "Frame Extraction @ 5.0s (Crossfade Transition Phase)",
+      "passed": true,
+      "details": "Size: 1327.7 KB"
+    },
+    {
+      "name": "Frame Extraction @ 8.0s (Clip 2 + Color Grade + Film Grain)",
+      "passed": true,
+      "details": "Size: 1973.0 KB"
+    },
+    {
+      "name": "Project Persistence (Save to .frameforge)",
+      "passed": true,
+      "details": "Path: acceptance_project.frameforge"
+    },
+    {
+      "name": "Project Restoration (Reopen from .frameforge)",
+      "passed": true,
+      "details": "Loaded 3 tracks, 4 assets"
+    },
+    {
+      "name": "Reliability: Missing Media Handling",
+      "passed": true,
+      "details": "Gracefully returned error without crash"
+    },
+    {
+      "name": "Reliability: Invalid Export Command Rejection",
+      "passed": true,
+      "details": "Gracefully rejected without process termination"
+    },
+    {
+      "name": "Workflow Screen Recording Generated (MP4)",
+      "passed": true,
+      "details": "Size: 1667.5 KB"
+    },
+    {
+      "name": "Workflow Animated Screen Recording (GIF)",
+      "passed": true,
+      "details": "Size: 1.16 MB"
+    }
+  ],
+  "artifacts": {
+    "masterVideo": "C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/acceptance_evidence/acceptance_master_10s.mp4",
+    "demoVideo": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\acceptance_evidence\\workflow_demo.mp4",
+    "demoGif": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\acceptance_evidence\\workflow_demo.gif",
+    "projectFile": "C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/acceptance_evidence/acceptance_project.frameforge",
+    "screenshots": [
+      "01_app_launch.png",
+      "02_media_imported.png",
+      "03_project_persisted.png",
+      "export_frame_02s.png",
+      "export_frame_05s.png",
+      "export_frame_08s.png"
+    ]
+  }
+}

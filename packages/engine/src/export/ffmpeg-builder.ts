@@ -6,10 +6,6 @@
  */
 
 import { TimelineSequence, TimelineClip } from '@frameforge/core';
-import { execFile } from 'child_process';
-import { promisify } from 'util';
-
-const execFileAsync = promisify(execFile);
 
 export type VideoCodec = 'h264' | 'hevc' | 'vp9' | 'prores';
 export type HardwareAccel = 'auto' | 'nvenc' | 'qsv' | 'amf' | 'cpu';
@@ -212,28 +208,38 @@ export class FFmpegCommandBuilder {
     if (videoInputs[0].effects?.includes('vignette')) {
       v0Chain += `,vignette=PI/4`;
     }
+    if (videoInputs[0].effects?.includes('blur')) {
+      v0Chain += `,gblur=sigma=10`;
+    }
     v0Chain += `[v0]`;
     filterComplex.push(v0Chain);
 
-    // Process Video 2
-    let v1Chain = `[1:v]trim=start=${videoInputs[1].trimStart}:duration=${videoInputs[1].duration},setpts=PTS-STARTPTS,scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2`;
-    if (videoInputs[1].effects?.includes('color_grade')) {
-      v1Chain += `,eq=contrast=1.2:brightness=0.04:saturation=1.3`;
-    }
-    if (videoInputs[1].effects?.includes('film_grain')) {
-      v1Chain += `,noise=alls=15:allf=t+u`;
-    }
-    v1Chain += `[v1]`;
-    filterComplex.push(v1Chain);
+    let currentVideoNode = '[v0]';
 
-    // Transition between v0 and v1
-    let currentVideoNode = '[base]';
-    if (transition) {
-      filterComplex.push(
-        `[v0][v1]xfade=transition=${transition.type}:duration=${transition.duration}:offset=${transition.offset}[base]`
-      );
-    } else {
-      filterComplex.push(`[v0][v1]concat=n=2:v=1:a=0[base]`);
+    // Process Video 2 (if present)
+    if (videoInputs.length > 1) {
+      let v1Chain = `[1:v]trim=start=${videoInputs[1].trimStart}:duration=${videoInputs[1].duration},setpts=PTS-STARTPTS,scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2`;
+      if (videoInputs[1].effects?.includes('color_grade')) {
+        v1Chain += `,eq=contrast=1.2:brightness=0.04:saturation=1.3`;
+      }
+      if (videoInputs[1].effects?.includes('film_grain')) {
+        v1Chain += `,noise=alls=15:allf=t+u`;
+      }
+      if (videoInputs[1].effects?.includes('blur')) {
+        v1Chain += `,gblur=sigma=10`;
+      }
+      v1Chain += `[v1]`;
+      filterComplex.push(v1Chain);
+
+      // Transition between v0 and v1
+      if (transition) {
+        filterComplex.push(
+          `[v0][v1]xfade=transition=${transition.type}:duration=${transition.duration}:offset=${transition.offset}[base]`
+        );
+      } else {
+        filterComplex.push(`[v0][v1]concat=n=2:v=1:a=0[base]`);
+      }
+      currentVideoNode = '[base]';
     }
 
     // Overlay Image
@@ -274,10 +280,120 @@ export class FFmpegCommandBuilder {
   }
 
   /**
+   * Compiles an entire TimelineSequence with its associated media assets into a real FFmpeg command
+   */
+  static buildSequenceExportArgs(params: {
+    sequence: TimelineSequence;
+    mediaAssets: Array<{ id: string; filePath: string; mediaType: string }>;
+    outputPath: string;
+    preset?: ExportPreset;
+    textOverlay?: { text: string; fontSize: number; fontColor: string; x: string | number; y: string | number };
+  }): string[] {
+    const { sequence, mediaAssets, outputPath, preset = EXPORT_PRESETS.PRODUCTION_1080P, textOverlay } = params;
+
+    const assetMap = new Map<string, { id: string; filePath: string; mediaType: string }>();
+    for (const a of mediaAssets) {
+      assetMap.set(a.id, a);
+    }
+
+    const videoClips: { clip: TimelineClip; asset: { id: string; filePath: string; mediaType: string } }[] = [];
+    const imageClips: { clip: TimelineClip; asset: { id: string; filePath: string; mediaType: string } }[] = [];
+    const audioClips: { clip: TimelineClip; asset: { id: string; filePath: string; mediaType: string } }[] = [];
+
+    for (const track of sequence.tracks) {
+      for (const clip of track.clips) {
+        const asset = assetMap.get(clip.assetId);
+        if (!asset) continue;
+
+        if (asset.mediaType === 'video') {
+          videoClips.push({ clip, asset });
+        } else if (asset.mediaType === 'image') {
+          imageClips.push({ clip, asset });
+        } else if (asset.mediaType === 'audio') {
+          audioClips.push({ clip, asset });
+        }
+      }
+    }
+
+    // Sort video clips by timeline start time
+    videoClips.sort((a, b) => a.clip.timelineRange.startSeconds - b.clip.timelineRange.startSeconds);
+
+    const videoInputs = videoClips.map(({ clip, asset }) => ({
+      filePath: asset.filePath,
+      trimStart: clip.sourceRange ? clip.sourceRange.startSeconds : 0,
+      duration: clip.timelineRange.durationSeconds,
+      effects: clip.effects ? clip.effects.map((e: any) => (typeof e === 'string' ? e : e.id || e.type || e.effectType)) : [],
+    }));
+
+    let imageOverlay: { filePath: string; x: number; y: number } | undefined;
+    if (imageClips.length > 0) {
+      imageOverlay = {
+        filePath: imageClips[0].asset.filePath,
+        x: imageClips[0].clip.transform?.position?.x ?? 80,
+        y: imageClips[0].clip.transform?.position?.y ?? 80,
+      };
+    }
+
+    let audioInput: { filePath: string; duration: number } | undefined;
+    if (audioClips.length > 0) {
+      audioInput = {
+        filePath: audioClips[0].asset.filePath,
+        duration: audioClips[0].clip.timelineRange.durationSeconds,
+      };
+    }
+
+    // Determine transition if 2 video clips overlap
+    let transition: { type: 'fade'; duration: number; offset: number } | undefined;
+    if (videoClips.length >= 2) {
+      const c0End = videoClips[0].clip.timelineRange.endSeconds;
+      const c1Start = videoClips[1].clip.timelineRange.startSeconds;
+      if (c0End > c1Start) {
+        const dur = Math.min(2.0, c0End - c1Start);
+        transition = {
+          type: 'fade',
+          duration: dur,
+          offset: c1Start,
+        };
+      }
+    }
+
+    let maxEnd = 0;
+    for (const track of sequence.tracks) {
+      for (const clip of track.clips) {
+        if (clip.timelineRange.endSeconds > maxEnd) {
+          maxEnd = clip.timelineRange.endSeconds;
+        }
+      }
+    }
+    const totalDuration = maxEnd > 0 ? maxEnd : 10;
+
+    return this.buildComplexCompositionArgs({
+      videoInputs,
+      transition,
+      imageOverlay,
+      textOverlay,
+      audioInput,
+      totalDuration: Math.max(1, totalDuration),
+      width: preset.width,
+      height: preset.height,
+      fps: preset.fps,
+      outputPath,
+    });
+  }
+
+  /**
    * Executes FFmpeg asynchronously and verifies completion
    */
   static async renderToDisk(args: string[]): Promise<{ success: boolean; stdout: string; stderr: string }> {
-    const { stdout, stderr } = await execFileAsync('ffmpeg', args);
-    return { success: true, stdout, stderr };
+    const cp = await import('child_process');
+    return new Promise((resolve, reject) => {
+      cp.execFile('ffmpeg', args, (error: any, stdout: string, stderr: string) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve({ success: true, stdout, stderr });
+        }
+      });
+    });
   }
 }
