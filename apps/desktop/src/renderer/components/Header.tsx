@@ -94,6 +94,7 @@ export const Header: React.FC = () => {
         {/* Undo / Redo */}
         <div className="flex items-center space-x-1 pl-3 border-l border-studio-750">
           <button
+            id="btn-undo"
             onClick={() => undo()}
             disabled={!canUndo}
             title="Undo (Ctrl+Z)"
@@ -102,6 +103,7 @@ export const Header: React.FC = () => {
             <Undo2 className="w-4 h-4" />
           </button>
           <button
+            id="btn-redo"
             onClick={() => redo()}
             disabled={!canRedo}
             title="Redo (Ctrl+Shift+Z)"
@@ -114,6 +116,7 @@ export const Header: React.FC = () => {
         {/* Project Persistence: Save / Open */}
         <div className="flex items-center space-x-1 pl-3 border-l border-studio-750">
           <button
+            id="btn-save-project"
             onClick={() => saveProject()}
             title="Save Project (Ctrl+S)"
             className="flex items-center space-x-1 px-2 py-1 rounded hover:bg-studio-800 text-slate-300 hover:text-white transition-colors text-xs"
@@ -122,6 +125,7 @@ export const Header: React.FC = () => {
             <span className="hidden sm:inline">Save</span>
           </button>
           <button
+            id="btn-open-project"
             onClick={() => openProject()}
             title="Open Project (Ctrl+O)"
             className="flex items-center space-x-1 px-2 py-1 rounded hover:bg-studio-800 text-slate-300 hover:text-white transition-colors text-xs"
@@ -139,6 +143,7 @@ export const Header: React.FC = () => {
           return (
             <button
               key={item.id}
+              id={`nav-tab-${item.id}`}
               onClick={() => {
                 if (item.id === 'export') {
                   setExportModalOpen(true);

@@ -323,3 +323,42 @@ export class TrimClipCommand implements ICommand<TimelineContext> {
   }
 }
 
+export class ApplyEffectCommand implements ICommand<TimelineContext> {
+  readonly id: string;
+  readonly name: string;
+  readonly timestamp: number;
+  private clipId: string;
+  private effect: any;
+
+  constructor(clipId: string, effect: any) {
+    this.id = `cmd_eff_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    this.name = `Apply Effect "${effect.name || effect.effectType}"`;
+    this.timestamp = Date.now();
+    this.clipId = clipId;
+    this.effect = effect;
+  }
+
+  execute(context: TimelineContext): void {
+    const found = findClipById(context.sequence, this.clipId);
+    if (!found) throw new Error(`Clip "${this.clipId}" not found for effect`);
+    found.clip.effects.push(this.effect);
+    context.onUpdate?.();
+  }
+
+  undo(context: TimelineContext): void {
+    const found = findClipById(context.sequence, this.clipId);
+    if (!found) return;
+    found.clip.effects = found.clip.effects.filter((e) => e.id !== this.effect.id);
+    context.onUpdate?.();
+  }
+
+  serialize() {
+    return {
+      type: 'ApplyEffectCommand',
+      id: this.id,
+      clipId: this.clipId,
+      effect: this.effect,
+    };
+  }
+}
+

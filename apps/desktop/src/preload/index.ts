@@ -7,8 +7,8 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 export interface FrameForgeAPI {
-  openMediaDialog: () => Promise<string[] | null>;
-  saveExportDialog: (defaultName?: string) => Promise<string | null>;
+  openMediaDialog: (presetPaths?: string[]) => Promise<string[] | null>;
+  saveExportDialog: (defaultName?: string, presetPath?: string) => Promise<string | null>;
   probeMedia: (filePath: string) => Promise<{ success: boolean; metadata?: any; error?: string }>;
   exportRender: (args: string[]) => Promise<{ success: boolean; stdout?: string; stderr?: string; error?: string }>;
   saveProject: (filePath?: string, data?: string) => Promise<{ success: boolean; filePath?: string; error?: string; canceled?: boolean }>;
@@ -17,8 +17,8 @@ export interface FrameForgeAPI {
 }
 
 const api: FrameForgeAPI = {
-  openMediaDialog: () => ipcRenderer.invoke('dialog:openMediaFile'),
-  saveExportDialog: (defaultName?: string) => ipcRenderer.invoke('dialog:saveExportFile', defaultName),
+  openMediaDialog: (presetPaths?: string[]) => ipcRenderer.invoke('dialog:openMediaFile', presetPaths),
+  saveExportDialog: (defaultName?: string, presetPath?: string) => ipcRenderer.invoke('dialog:saveExportFile', defaultName, presetPath),
   probeMedia: (filePath: string) => ipcRenderer.invoke('media:probe', filePath),
   exportRender: (args: string[]) => ipcRenderer.invoke('render:export', args),
   saveProject: (filePath?: string, data?: string) => ipcRenderer.invoke('project:save', filePath, data),

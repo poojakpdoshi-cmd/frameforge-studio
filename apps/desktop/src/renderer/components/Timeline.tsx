@@ -8,10 +8,6 @@ import {
   ZoomIn,
   ZoomOut,
   Lock,
-  Volume2,
-  VolumeX,
-  Eye,
-  EyeOff,
 } from 'lucide-react';
 import { useEditorStore, EditingTool } from '../store/editor-store.js';
 import { RationalTime, TimelineClip, TimelineTrack } from '@frameforge/core';
@@ -31,10 +27,11 @@ export const Timeline: React.FC = () => {
     deleteClip,
     moveClip,
     trimClip,
+    addClipToTrack,
+    mediaAssets,
   } = useEditorStore();
 
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
-  const [isScrubbing, setIsScrubbing] = useState(false);
   const [snapping, setSnapping] = useState(true);
 
   const totalDurationSeconds = Math.max(
@@ -59,7 +56,6 @@ export const Timeline: React.FC = () => {
 
     let seconds = clickX / zoom;
     if (snapping) {
-      // Snap to nearest frame
       const frame = Math.round(seconds * sequence.fps);
       seconds = frame / sequence.fps;
     }
@@ -71,12 +67,11 @@ export const Timeline: React.FC = () => {
     e.stopPropagation();
 
     if (activeTool === 'blade') {
-      // Razor Tool: Split clip at exact click position
       if (!timelineContainerRef.current) return;
       const rect = timelineContainerRef.current.getBoundingClientRect();
       const scrollLeft = timelineContainerRef.current.scrollLeft;
       const clickX = e.clientX - rect.left + scrollLeft - 180;
-      const cutSeconds = clickX / zoom;
+      const cutSeconds = Math.max(0, clickX / zoom);
       const cutTime = RationalTime.fromSeconds(cutSeconds, sequence.fps);
       splitClip(clip.id, cutTime);
     } else {
@@ -96,13 +91,33 @@ export const Timeline: React.FC = () => {
     }
   };
 
+  const handleTrackDrop = async (e: React.DragEvent<HTMLDivElement>, trackId: string) => {
+    e.preventDefault();
+    const assetId =
+      e.dataTransfer.getData('application/x-frameforge-asset') ||
+      e.dataTransfer.getData('text/plain');
+    if (!assetId) return;
+
+    const laneRect = e.currentTarget.getBoundingClientRect();
+    const scrollLeft = timelineContainerRef.current ? timelineContainerRef.current.scrollLeft : 0;
+    const dropX = Math.max(0, e.clientX - laneRect.left + scrollLeft);
+    const dropSeconds = dropX / zoom;
+    const startFrame = Math.round(dropSeconds * sequence.fps);
+
+    const asset = mediaAssets.find((a) => a.id === assetId);
+    const durFrames = asset ? asset.duration.toFrames(sequence.fps) : 120;
+
+    await addClipToTrack(trackId, assetId, startFrame, durFrames);
+  };
+
   return (
-    <div className="h-full flex flex-col bg-studio-950 border-t border-studio-800 select-none">
+    <div className="h-full flex flex-col bg-studio-950 border-t border-studio-800 select-none" data-testid="timeline-panel">
       {/* Timeline Toolbar */}
       <div className="h-9 bg-studio-900 border-b border-studio-800 px-3 flex items-center justify-between text-xs">
         <div className="flex items-center space-x-1">
           {/* Tool Palette */}
           <button
+            id="btn-tool-select"
             onClick={() => setActiveTool('select')}
             title="Selection Tool (V)"
             className={`p-1.5 rounded transition-colors ${
@@ -114,6 +129,7 @@ export const Timeline: React.FC = () => {
             <MousePointer className="w-3.5 h-3.5" />
           </button>
           <button
+            id="btn-tool-blade"
             onClick={() => setActiveTool('blade')}
             title="Razor / Blade Tool (C)"
             className={`p-1.5 rounded transition-colors ${
@@ -129,6 +145,7 @@ export const Timeline: React.FC = () => {
 
           {/* Quick Actions */}
           <button
+            id="btn-split-playhead"
             onClick={handleSplitSelected}
             disabled={!selectedClipId}
             title="Split Clip at Playhead (Ctrl+K)"
@@ -137,6 +154,7 @@ export const Timeline: React.FC = () => {
             <Split className="w-3.5 h-3.5" />
           </button>
           <button
+            id="btn-delete-clip"
             onClick={handleDeleteSelected}
             disabled={!selectedClipId}
             title="Delete Selected Clip (Del)"
@@ -149,6 +167,7 @@ export const Timeline: React.FC = () => {
 
           {/* Snapping Toggle */}
           <button
+            id="btn-toggle-snapping"
             onClick={() => setSnapping(!snapping)}
             title="Magnetic Snapping (S)"
             className={`p-1.5 rounded flex items-center space-x-1 ${
@@ -162,10 +181,12 @@ export const Timeline: React.FC = () => {
         {/* Zoom Controls */}
         <div className="flex items-center space-x-2">
           <ZoomOut
+            id="btn-zoom-out"
             className="w-3.5 h-3.5 text-slate-500 cursor-pointer hover:text-slate-300"
             onClick={() => setZoom(zoom - 15)}
           />
           <input
+            id="timeline-zoom-slider"
             type="range"
             min="20"
             max="200"
@@ -174,6 +195,7 @@ export const Timeline: React.FC = () => {
             className="w-24 h-1 bg-studio-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
           />
           <ZoomIn
+            id="btn-zoom-in"
             className="w-3.5 h-3.5 text-slate-500 cursor-pointer hover:text-slate-300"
             onClick={() => setZoom(zoom + 15)}
           />
@@ -191,13 +213,11 @@ export const Timeline: React.FC = () => {
       >
         {/* Left Track Headers Column (Fixed 180px width) */}
         <div className="w-[180px] shrink-0 bg-studio-900 border-r border-studio-800 z-20 flex flex-col sticky left-0">
-          {/* Header spacer aligned with ruler */}
           <div className="h-6 bg-studio-850 border-b border-studio-800 px-3 flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span>TRACKS</span>
             <span>M / S / L</span>
           </div>
 
-          {/* Individual Track Controls */}
           <div className="flex-1 divide-y divide-studio-800/60">
             {sequence.tracks.map((track) => {
               const isAudio = track.kind === 'audio';
@@ -205,6 +225,7 @@ export const Timeline: React.FC = () => {
                 <div
                   key={track.id}
                   className="h-12 px-3 flex items-center justify-between bg-studio-900 hover:bg-studio-850/60 text-xs text-slate-300 transition-colors"
+                  data-track-header={track.name}
                 >
                   <div className="flex items-center space-x-2">
                     <span
@@ -275,7 +296,7 @@ export const Timeline: React.FC = () => {
           style={{ width: `${timelineWidth}px`, minWidth: '100%' }}
         >
           {/* Timecode Ruler (Top 24px) */}
-          <div className="h-6 bg-studio-900 border-b border-studio-800 relative cursor-pointer">
+          <div className="h-6 bg-studio-900 border-b border-studio-800 relative cursor-pointer" id="timeline-ruler">
             {Array.from({ length: Math.ceil(totalDurationSeconds) }).map((_, i) => (
               <div
                 key={i}
@@ -294,6 +315,13 @@ export const Timeline: React.FC = () => {
             {sequence.tracks.map((track) => (
               <div
                 key={track.id}
+                data-track-lane={track.name}
+                data-track-id={track.id}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = 'copy';
+                }}
+                onDrop={(e) => handleTrackDrop(e, track.id)}
                 className="h-12 relative bg-studio-950/80 hover:bg-studio-900/40 transition-colors"
               >
                 {/* Track Clips */}
@@ -305,24 +333,50 @@ export const Timeline: React.FC = () => {
                   return (
                     <div
                       key={clip.id}
+                      data-testid="timeline-clip"
+                      data-clip-id={clip.id}
                       onClick={(e) => handleClipClick(e, clip)}
-                      className={`absolute top-1 bottom-1 rounded px-2.5 flex items-center justify-between text-xs font-medium cursor-pointer shadow-md transition-all overflow-hidden ${
+                      className={`absolute top-1 bottom-1 rounded px-2 flex items-center justify-between text-xs font-medium cursor-pointer shadow-md transition-all overflow-hidden group ${
                         isSelected
                           ? 'ring-2 ring-blue-400 z-10 shadow-blue-900/50'
                           : 'opacity-90 hover:opacity-100'
                       }`}
                       style={{
                         left: `${leftPx}px`,
-                        width: `${Math.max(12, widthPx)}px`,
+                        width: `${Math.max(16, widthPx)}px`,
                         backgroundColor: clip.color || '#2563eb',
                       }}
                     >
-                      <span className="truncate text-white text-[11px] font-medium drop-shadow">
+                      {/* Left Trim Handle */}
+                      <div
+                        data-testid="trim-left"
+                        title="Drag to trim start"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const maxDelta = Math.max(1, Math.floor(clip.timelineRange.duration.toFrames(sequence.fps) / 4));
+                          trimClip(clip.id, 'head', RationalTime.fromFrames(Math.min(12, maxDelta), sequence.fps));
+                        }}
+                        className="absolute left-0 top-0 bottom-0 w-2 hover:w-3 bg-white/20 hover:bg-white/60 cursor-col-resize z-20"
+                      />
+
+                      <span className="truncate text-white text-[11px] font-medium drop-shadow ml-1">
                         {clip.name}
                       </span>
-                      <span className="text-[9px] font-mono text-white/70 ml-1 shrink-0">
+                      <span className="text-[9px] font-mono text-white/70 ml-1 shrink-0 mr-1">
                         {clip.timelineRange.duration.toSMPTE(sequence.fps)}
                       </span>
+
+                      {/* Right Trim Handle */}
+                      <div
+                        data-testid="trim-right"
+                        title="Drag to trim end"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const maxDelta = Math.max(1, Math.floor(clip.timelineRange.duration.toFrames(sequence.fps) / 4));
+                          trimClip(clip.id, 'tail', RationalTime.fromFrames(-Math.min(12, maxDelta), sequence.fps));
+                        }}
+                        className="absolute right-0 top-0 bottom-0 w-2 hover:w-3 bg-white/20 hover:bg-white/60 cursor-col-resize z-20"
+                      />
                     </div>
                   );
                 })}
@@ -331,14 +385,13 @@ export const Timeline: React.FC = () => {
 
             {/* Playhead Needle & Vertical Line */}
             <div
+              id="timeline-playhead"
               className="absolute top-0 bottom-0 pointer-events-none z-30 transition-none"
               style={{
                 left: `${playheadTime.toSeconds() * zoom}px`,
               }}
             >
-              {/* Playhead Marker Head */}
               <div className="w-3.5 h-3.5 bg-red-500 -ml-[7px] rotate-45 -mt-1 shadow-md shadow-red-950" />
-              {/* Vertical Playhead Line */}
               <div className="w-[1.5px] h-[1000px] bg-red-500 shadow-sm shadow-red-900" />
             </div>
           </div>
@@ -347,4 +400,3 @@ export const Timeline: React.FC = () => {
     </div>
   );
 };
-

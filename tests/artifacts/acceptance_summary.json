@@ -1,0 +1,237 @@
+{
+  "timestamp": "2026-11-01T16:16:05.807Z",
+  "environment": {
+    "os": "win32",
+    "node": "v24.19.0",
+    "electron": "45.2.1",
+    "playwright": "^1.64.1"
+  },
+  "tests": [
+    {
+      "category": "UI",
+      "name": "Desktop Application Launches Successfully",
+      "passed": true,
+      "details": "Title: FrameForge Studio — Professional NLE & VFX"
+    },
+    {
+      "category": "UI",
+      "name": "All 4 Media Fixtures Imported & Probed via UI",
+      "passed": true,
+      "details": "Imported 4 assets"
+    },
+    {
+      "category": "Engine",
+      "name": "Source Monitor Decodes & Streams Real Media",
+      "passed": true,
+      "details": "Src: media:///C:/Users/Poojak Doshi/.gemini/antigravity/scratch/frameforge-studio/tests/fixtures/media/video_clip1.mp4"
+    },
+    {
+      "category": "Engine",
+      "name": "Source Monitor In/Out Insert to Timeline Active Track",
+      "passed": true,
+      "details": "Clips on timeline: 1"
+    },
+    {
+      "category": "UI",
+      "name": "Multitrack Clips Assembled on Timeline (V1, V2, A1)",
+      "passed": true,
+      "details": "Total clips: 4"
+    },
+    {
+      "category": "Engine",
+      "name": "Blade Split & Edge Trimming Interactive Operations",
+      "passed": true,
+      "details": "Split & Trim verified"
+    },
+    {
+      "category": "Engine",
+      "name": "Inspector Transforms & GPU Shader Effects Application",
+      "passed": true,
+      "details": "Applied 3 shader effects"
+    },
+    {
+      "category": "Engine",
+      "name": "Full Undo/Redo Cycle for Editing Commands",
+      "passed": true,
+      "details": "Undo (2) -> Redo (3)"
+    },
+    {
+      "category": "Persistence",
+      "name": "Project Saved to Disk (.frameforge format)",
+      "passed": true,
+      "details": "File: C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\artifacts\\acceptance_project.frameforge (8903 bytes)"
+    },
+    {
+      "category": "Persistence",
+      "name": "Project Reopened & State Fully Rehydrated",
+      "passed": true,
+      "details": "Preserved 4 clips"
+    },
+    {
+      "category": "FFmpeg",
+      "name": "Native FFmpeg Pipeline Render Completed",
+      "passed": true,
+      "details": "Output: C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\artifacts\\acceptance_master_10s.mp4 (0.37 MB)"
+    },
+    {
+      "category": "FFprobe",
+      "name": "Export Duration Accuracy (>= 9.5s and <= 10.5s)",
+      "passed": true,
+      "details": "Duration: 10.00s"
+    },
+    {
+      "category": "FFprobe",
+      "name": "Video Stream Dimensions (1920x1080 Full HD)",
+      "passed": true,
+      "details": "1920x1080"
+    },
+    {
+      "category": "FFprobe",
+      "name": "Video Codec Format (H.264 Baseline/High)",
+      "passed": true,
+      "details": "Codec: h264"
+    },
+    {
+      "category": "FFprobe",
+      "name": "Audio Stream Format (AAC Stereo 48kHz)",
+      "passed": true,
+      "details": "Codec: aac, Sample Rate: 48000Hz"
+    }
+  ],
+  "ffprobeVerification": {
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+        "profile": "High",
+        "codec_type": "video",
+        "codec_tag_string": "avc1",
+        "codec_tag": "0x31637661",
+        "mime_codec_string": "avc1.640028",
+        "width": 1920,
+        "height": 1080,
+        "coded_width": 1920,
+        "coded_height": 1080,
+        "has_b_frames": 2,
+        "sample_aspect_ratio": "1:1",
+        "display_aspect_ratio": "16:9",
+        "pix_fmt": "yuv420p",
+        "level": 40,
+        "chroma_location": "left",
+        "field_order": "progressive",
+        "is_avc": "true",
+        "nal_length_size": "4",
+        "id": "0x1",
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "time_base": "1/12288",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 73728,
+        "duration": "6.000000",
+        "bit_rate": "114166",
+        "bits_per_raw_sample": "8",
+        "nb_frames": "144",
+        "extradata_size": 48,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "VideoHandler",
+          "encoder": "Lavc63.1.100 libx264"
+        }
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_long_name": "AAC (Advanced Audio Coding)",
+        "profile": "LC",
+        "codec_type": "audio",
+        "codec_tag_string": "mp4a",
+        "codec_tag": "0x6134706d",
+        "mime_codec_string": "mp4a.40.2",
+        "sample_fmt": "fltp",
+        "sample_rate": "48000",
+        "channels": 2,
+        "channel_layout": "stereo",
+        "bits_per_sample": 0,
+        "initial_padding": 1024,
+        "id": "0x2",
+        "r_frame_rate": "0/0",
+        "avg_frame_rate": "0/0",
+        "time_base": "1/48000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 480000,
+        "duration": "10.000000",
+        "bit_rate": "239946",
+        "nb_frames": "470",
+        "extradata_size": 5,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0,
+          "multilayer": 0
+        },
+        "tags": {
+          "language": "und",
+          "handler_name": "SoundHandler"
+        }
+      }
+    ],
+    "format": {
+      "filename": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\artifacts\\acceptance_master_10s.mp4",
+      "nb_streams": 2,
+      "nb_programs": 0,
+      "nb_stream_groups": 0,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "format_long_name": "QuickTime / MOV",
+      "start_time": "0.000000",
+      "duration": "10.000000",
+      "size": "392559",
+      "bit_rate": "314047",
+      "probe_score": 100,
+      "tags": {
+        "major_brand": "isom",
+        "minor_version": "512",
+        "compatible_brands": "isomiso2avc1mp41",
+        "encoder": "Lavf63.1.100"
+      }
+    }
+  }
+}

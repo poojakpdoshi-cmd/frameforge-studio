@@ -19,6 +19,8 @@ import {
   SplitClipCommand,
   TrimClipCommand,
   MoveClipCommand,
+  ApplyEffectCommand,
+  rehydrateSequence,
   findClipById,
   BlendMode,
   TransformProperties,
@@ -35,6 +37,11 @@ interface EditorState {
   mediaAssets: MediaAsset[];
   selectedClipId: string | null;
   selectedTrackId: string | null;
+  selectedAssetId: string | null;
+  sourcePlayheadTime: number; // In seconds
+  isSourcePlaying: boolean;
+  sourceInPoint: number | null;
+  sourceOutPoint: number | null;
   playheadTime: RationalTime;
   isPlaying: boolean;
   activeTool: EditingTool;
@@ -56,6 +63,12 @@ interface EditorState {
   setPlayheadTime: (time: RationalTime) => void;
   setPlayheadSeconds: (seconds: number) => void;
   togglePlay: () => void;
+  selectAsset: (id: string | null) => void;
+  setSourcePlayheadTime: (time: number) => void;
+  toggleSourcePlay: () => void;
+  setSourceInPoint: (time: number | null) => void;
+  setSourceOutPoint: (time: number | null) => void;
+  insertSourceToTimeline: (targetTrackId?: string) => Promise<void>;
   setActiveTool: (tool: EditingTool) => void;
   setWorkspaceMode: (mode: WorkspaceMode) => void;
   setZoom: (zoom: number) => void;
@@ -79,106 +92,31 @@ interface EditorState {
   updateBlendMode: (clipId: string, blendMode: BlendMode) => void;
   updateAudio: (clipId: string, volume: number, pan: number) => void;
   addEffect: (clipId: string, effectType: string, params: Record<string, any>) => void;
+  removeEffect: (clipId: string, effectId: string) => void;
   undo: () => Promise<void>;
   redo: () => Promise<void>;
   runMCPTool: (toolName: string, args: Record<string, any>) => Promise<any>;
 }
 
-// Initial mock project sequence
-const initialSeq = createSequence('Project 01 — Feature Montage', 24, 1920, 1080);
+export function toMediaUrl(filePath: string): string {
+  if (!filePath) return '';
+  if (
+    filePath.startsWith('blob:') ||
+    filePath.startsWith('data:') ||
+    filePath.startsWith('http://') ||
+    filePath.startsWith('https://') ||
+    filePath.startsWith('internal://')
+  ) {
+    return filePath;
+  }
+  if (filePath.startsWith('media://')) return filePath;
+  const normalized = filePath.replace(/\\/g, '/');
+  return normalized.startsWith('/') ? `media://${normalized}` : `media:///${normalized}`;
+}
 
-// Default sample media assets
-const initialAssets: MediaAsset[] = [
-  {
-    id: 'asset_smpte_bars',
-    name: 'SMPTE Color Calibration Bars.mp4',
-    filePath: 'internal://generators/smpte.mp4',
-    mediaType: 'generator',
-    duration: RationalTime.fromSeconds(30, 24),
-    width: 1920,
-    height: 1080,
-    fps: 24,
-    dateAdded: Date.now(),
-  },
-  {
-    id: 'asset_cinematic_landscape',
-    name: 'Nordic Fjord Aerial 4K.mp4',
-    filePath: 'internal://footage/fjord.mp4',
-    mediaType: 'video',
-    duration: RationalTime.fromSeconds(18, 24),
-    width: 3840,
-    height: 2160,
-    fps: 24,
-    dateAdded: Date.now(),
-  },
-  {
-    id: 'asset_neon_city',
-    name: 'Neo-Tokyo Cyberpunk Timelapse.mp4',
-    filePath: 'internal://footage/city.mp4',
-    mediaType: 'video',
-    duration: RationalTime.fromSeconds(12, 24),
-    width: 1920,
-    height: 1080,
-    fps: 24,
-    dateAdded: Date.now(),
-  },
-  {
-    id: 'asset_synth_soundtrack',
-    name: 'Cinematic Atmosphere Master.wav',
-    filePath: 'internal://audio/synth.wav',
-    mediaType: 'audio',
-    duration: RationalTime.fromSeconds(60, 24),
-    sampleRate: 48000,
-    channels: 2,
-    dateAdded: Date.now(),
-  },
-];
-
-// Seed initial clips onto tracks
-const v1 = initialSeq.tracks.find((t) => t.name === 'V1')!;
-const v2 = initialSeq.tracks.find((t) => t.name === 'V2')!;
-const a1 = initialSeq.tracks.find((t) => t.name === 'A1')!;
-
-v1.clips.push(
-  createClip({
-    name: 'Nordic Fjord Aerial',
-    assetId: 'asset_cinematic_landscape',
-    trackId: v1.id,
-    timelineStart: RationalTime.fromFrames(0, 24),
-    duration: RationalTime.fromFrames(144, 24), // 6 sec
-    color: '#0284c7',
-  }),
-  createClip({
-    name: 'Neo-Tokyo Timelapse',
-    assetId: 'asset_neon_city',
-    trackId: v1.id,
-    timelineStart: RationalTime.fromFrames(144, 24),
-    duration: RationalTime.fromFrames(120, 24), // 5 sec
-    color: '#7c3aed',
-  })
-);
-
-v2.clips.push(
-  createClip({
-    name: 'SMPTE Overlay Test',
-    assetId: 'asset_smpte_bars',
-    trackId: v2.id,
-    timelineStart: RationalTime.fromFrames(48, 24),
-    duration: RationalTime.fromFrames(96, 24), // 4 sec
-    color: '#ea580c',
-  })
-);
-
-a1.clips.push(
-  createClip({
-    name: 'Cinematic Score Audio',
-    assetId: 'asset_synth_soundtrack',
-    trackId: a1.id,
-    timelineStart: RationalTime.fromFrames(0, 24),
-    duration: RationalTime.fromFrames(264, 24), // 11 sec
-    color: '#059669',
-  })
-);
+// Initial clean project sequence
+const initialSeq = createSequence('Sequence 1', 24, 1920, 1080);
+const initialAssets: MediaAsset[] = [];
 
 const undoMgr = new UndoManager<{ sequence: TimelineSequence }>({ sequence: initialSeq });
 const mcp = new FrameForgeMCPServer(initialSeq, undoMgr);
@@ -197,8 +135,13 @@ export const useEditorStore = create<EditorState>((set, get) => {
   return {
     sequence: initialSeq,
     mediaAssets: initialAssets,
-    selectedClipId: v1.clips[0]?.id || null,
-    selectedTrackId: v1.id,
+    selectedClipId: null,
+    selectedTrackId: null,
+    selectedAssetId: null,
+    sourcePlayheadTime: 0,
+    isSourcePlaying: false,
+    sourceInPoint: null,
+    sourceOutPoint: null,
     playheadTime: RationalTime.fromFrames(0, 24),
     isPlaying: false,
     activeTool: 'select',
@@ -221,6 +164,62 @@ export const useEditorStore = create<EditorState>((set, get) => {
       set({ playheadTime: RationalTime.fromSeconds(seconds, fps) });
     },
     togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
+    selectAsset: (id) =>
+      set({
+        selectedAssetId: id,
+        sourcePlayheadTime: 0,
+        isSourcePlaying: false,
+        sourceInPoint: null,
+        sourceOutPoint: null,
+      }),
+    setSourcePlayheadTime: (time) => set({ sourcePlayheadTime: time }),
+    toggleSourcePlay: () => set((s) => ({ isSourcePlaying: !s.isSourcePlaying })),
+    setSourceInPoint: (time) => set({ sourceInPoint: time }),
+    setSourceOutPoint: (time) => set({ sourceOutPoint: time }),
+
+    insertSourceToTimeline: async (targetTrackId?: string) => {
+      const state = get();
+      if (!state.selectedAssetId) return;
+      const asset = state.mediaAssets.find((a) => a.id === state.selectedAssetId);
+      if (!asset) return;
+
+      const fps = state.sequence.fps;
+      let track = targetTrackId ? state.sequence.tracks.find((t) => t.id === targetTrackId) : null;
+      if (!track) {
+        track = state.sequence.tracks.find((t) =>
+          asset.mediaType === 'audio' ? t.kind === 'audio' : t.kind === 'video'
+        );
+      }
+      if (!track) return;
+
+      const inSec = state.sourceInPoint ?? 0;
+      const outSec = state.sourceOutPoint ?? asset.duration.toSeconds();
+      const durSec = Math.max(0.1, outSec - inSec);
+
+      const clip = createClip({
+        name: asset.name.replace(/\.[^/.]+$/, ''),
+        assetId: asset.id,
+        trackId: track.id,
+        timelineStart: state.playheadTime,
+        duration: RationalTime.fromSeconds(durSec, fps),
+        color:
+          asset.mediaType === 'audio'
+            ? '#059669'
+            : asset.mediaType === 'image'
+            ? '#7c3aed'
+            : '#2563eb',
+      });
+
+      clip.sourceRange = new TimeRange(
+        RationalTime.fromSeconds(inSec, fps),
+        RationalTime.fromSeconds(durSec, fps)
+      );
+
+      const cmd = new AddClipCommand(track.id, clip);
+      await state.undoManager.executeCommand(cmd);
+      set({ selectedClipId: clip.id, sequence: { ...state.sequence } });
+    },
+
     setActiveTool: (tool) => set({ activeTool: tool }),
     setWorkspaceMode: (mode) => set({ workspaceMode: mode }),
     setZoom: (zoom) => set({ zoom: Math.max(10, Math.min(300, zoom)) }),
@@ -233,7 +232,7 @@ export const useEditorStore = create<EditorState>((set, get) => {
       set({ sequence: seq, selectedClipId: null });
     },
 
-    saveProject: async () => {
+    saveProject: async (targetPath?: string) => {
       const state = get();
       const projectPayload = {
         version: '0.1.0',
@@ -241,10 +240,14 @@ export const useEditorStore = create<EditorState>((set, get) => {
         assets: state.mediaAssets,
         sequence: state.sequence,
       };
-      const jsonStr = JSON.stringify(projectPayload, null, 2);
+      const jsonStr = JSON.stringify(
+        projectPayload,
+        (_k, v) => (typeof v === 'bigint' ? v.toString() : v),
+        2
+      );
 
       if (window.frameforge?.saveProject) {
-        const res = await window.frameforge.saveProject(undefined, jsonStr);
+        const res = await window.frameforge.saveProject(targetPath, jsonStr);
         return res.success;
       } else {
         // Web fallback: download file
@@ -259,15 +262,26 @@ export const useEditorStore = create<EditorState>((set, get) => {
       }
     },
 
-    openProject: async () => {
+    openProject: async (targetPath?: string) => {
       if (window.frameforge?.loadProject) {
-        const res = await window.frameforge.loadProject();
+        const res = await window.frameforge.loadProject(targetPath);
         if (res.success && res.data) {
           const payload = res.data;
           if (payload.sequence) {
-            get().setSequence(payload.sequence);
-            if (payload.assets) {
-              set({ mediaAssets: payload.assets });
+            const rehydratedSeq = rehydrateSequence(payload.sequence);
+            get().setSequence(rehydratedSeq);
+            if (payload.assets && Array.isArray(payload.assets)) {
+              const rehydratedAssets = payload.assets.map((a: any) => ({
+                ...a,
+                duration: new RationalTime(
+                  BigInt(a.duration?.value ?? 0),
+                  Number(a.duration?.timescale ?? rehydratedSeq.fps)
+                ),
+              }));
+              set({ mediaAssets: rehydratedAssets });
+              for (const asset of rehydratedAssets) {
+                get().importAsset(asset);
+              }
             }
             return true;
           }
@@ -280,41 +294,55 @@ export const useEditorStore = create<EditorState>((set, get) => {
       // Create and cache actual media elements for realtime canvas rendering
       const state = get();
       if (typeof document !== 'undefined') {
+        const streamUrl = toMediaUrl(asset.filePath);
         if (asset.mediaType === 'video') {
           const video = document.createElement('video');
-          video.src = asset.filePath;
-          video.crossOrigin = 'anonymous';
+          video.src = streamUrl;
           video.preload = 'auto';
           video.muted = true;
+          video.playsInline = true;
           state.mediaElements.set(asset.id, video);
         } else if (asset.mediaType === 'image') {
           const img = new Image();
-          img.src = asset.filePath;
-          img.crossOrigin = 'anonymous';
+          img.src = streamUrl;
           state.mediaElements.set(asset.id, img);
         }
       }
-      set((s) => ({ mediaAssets: [asset, ...s.mediaAssets] }));
+      set((s) => ({
+        mediaAssets: [...s.mediaAssets, asset],
+        selectedAssetId: s.selectedAssetId || asset.id,
+      }));
     },
 
-    addClipToTrack: async (trackId, assetId, startFrame = 0, durationFrames = 120) => {
+    addClipToTrack: async (trackId, assetId, startFrame = 0, durationFrames?: number) => {
       const state = get();
       const asset = state.mediaAssets.find((a) => a.id === assetId);
       const name = asset ? asset.name.replace(/\.[^/.]+$/, '') : 'New Clip';
       const fps = state.sequence.fps;
+      const actualDuration =
+        durationFrames !== undefined
+          ? durationFrames
+          : asset
+          ? asset.duration.toFrames(fps)
+          : 120;
 
       const clip = createClip({
         name,
         assetId,
         trackId,
         timelineStart: RationalTime.fromFrames(startFrame, fps),
-        duration: RationalTime.fromFrames(durationFrames, fps),
-        color: '#2563eb',
+        duration: RationalTime.fromFrames(actualDuration, fps),
+        color:
+          asset?.mediaType === 'audio'
+            ? '#059669'
+            : asset?.mediaType === 'image'
+            ? '#7c3aed'
+            : '#2563eb',
       });
 
       const cmd = new AddClipCommand(trackId, clip);
       await state.undoManager.executeCommand(cmd);
-      set({ selectedClipId: clip.id });
+      set({ selectedClipId: clip.id, sequence: { ...state.sequence } });
     },
 
     splitClip: async (clipId, splitPoint) => {
@@ -322,27 +350,31 @@ export const useEditorStore = create<EditorState>((set, get) => {
       const cut = splitPoint || state.playheadTime;
       const cmd = new SplitClipCommand(clipId, cut);
       await state.undoManager.executeCommand(cmd);
+      set({ sequence: { ...state.sequence } });
     },
 
     deleteClip: async (clipId) => {
       const state = get();
       const cmd = new DeleteClipCommand(clipId);
       await state.undoManager.executeCommand(cmd);
-      if (state.selectedClipId === clipId) {
-        set({ selectedClipId: null });
-      }
+      set({
+        sequence: { ...state.sequence },
+        selectedClipId: state.selectedClipId === clipId ? null : state.selectedClipId,
+      });
     },
 
     moveClip: async (clipId, newTrackId, newStart) => {
       const state = get();
       const cmd = new MoveClipCommand(clipId, newTrackId, newStart);
       await state.undoManager.executeCommand(cmd);
+      set({ sequence: { ...state.sequence } });
     },
 
     trimClip: async (clipId, edge, delta) => {
       const state = get();
       const cmd = new TrimClipCommand(clipId, edge, delta);
       await state.undoManager.executeCommand(cmd);
+      set({ sequence: { ...state.sequence } });
     },
 
     updateTransform: (clipId, transformUpdates) => {
@@ -373,17 +405,25 @@ export const useEditorStore = create<EditorState>((set, get) => {
       }
     },
 
-    addEffect: (clipId, effectType, params) => {
+    addEffect: async (clipId, effectType, params) => {
+      const state = get();
+      const effect = {
+        id: `eff_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        effectType,
+        name: effectType.toUpperCase(),
+        enabled: true,
+        parameters: params,
+      };
+      const cmd = new ApplyEffectCommand(clipId, effect);
+      await state.undoManager.executeCommand(cmd);
+      set({ sequence: { ...state.sequence } });
+    },
+
+    removeEffect: (clipId, effectId) => {
       const state = get();
       const found = findClipById(state.sequence, clipId);
       if (found) {
-        found.clip.effects.push({
-          id: `eff_${Date.now()}`,
-          effectType,
-          name: effectType.toUpperCase(),
-          enabled: true,
-          parameters: params,
-        });
+        found.clip.effects = found.clip.effects.filter((e) => e.id !== effectId);
         set({ sequence: { ...state.sequence } });
       }
     },
@@ -407,4 +447,8 @@ export const useEditorStore = create<EditorState>((set, get) => {
     },
   };
 });
+
+if (typeof window !== 'undefined') {
+  (window as any).__editorStore = useEditorStore;
+}
 

@@ -121,11 +121,24 @@ export class FrameCompositor {
     const anchorY = -drawH * clip.transform.anchor.y;
 
     // 4. Draw Media Element or High-Visibility Procedural Canvas
-    if (element) {
-      if (element instanceof HTMLVideoElement && Math.abs(element.currentTime - sourceCurrent.toSeconds()) > 0.1) {
-        element.currentTime = sourceCurrent.toSeconds();
+    let canDraw = false;
+    if (element instanceof HTMLImageElement) {
+      canDraw = element.complete && element.naturalWidth > 0;
+    } else if (element instanceof HTMLVideoElement) {
+      canDraw = element.readyState >= 2;
+    } else if (element) {
+      canDraw = true;
+    }
+
+    if (element && canDraw) {
+      try {
+        if (element instanceof HTMLVideoElement && Math.abs(element.currentTime - sourceCurrent.toSeconds()) > 0.1) {
+          element.currentTime = sourceCurrent.toSeconds();
+        }
+        ctx.drawImage(element, anchorX, anchorY, drawW, drawH);
+      } catch {
+        this.drawProceduralPlaceholder(ctx, anchorX, anchorY, drawW, drawH, clip.name, clip.color);
       }
-      ctx.drawImage(element, anchorX, anchorY, drawW, drawH);
     } else {
       this.drawProceduralPlaceholder(ctx, anchorX, anchorY, drawW, drawH, clip.name, clip.color);
     }

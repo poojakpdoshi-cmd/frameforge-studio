@@ -5,8 +5,6 @@ import {
   Layers,
   Sparkles,
   Volume2,
-  RotateCw,
-  Plus,
   Trash2,
 } from 'lucide-react';
 import { useEditorStore } from '../store/editor-store.js';
@@ -20,6 +18,7 @@ export const Inspector: React.FC = () => {
     updateBlendMode,
     updateAudio,
     addEffect,
+    removeEffect,
   } = useEditorStore();
 
   const found = selectedClipId ? findClipById(sequence, selectedClipId) : null;
@@ -27,7 +26,7 @@ export const Inspector: React.FC = () => {
 
   if (!clip) {
     return (
-      <div className="h-full flex flex-col items-center justify-center p-6 text-center text-slate-500 bg-studio-900 border-l border-studio-750">
+      <div className="h-full flex flex-col items-center justify-center p-6 text-center text-slate-500 bg-studio-900 border-l border-studio-750 select-none" data-testid="inspector-empty">
         <Sliders className="w-8 h-8 text-studio-700 mb-2" />
         <p className="text-xs font-medium text-slate-400">No Clip Selected</p>
         <p className="text-[11px] text-slate-600 mt-1 max-w-[180px]">
@@ -53,14 +52,14 @@ export const Inspector: React.FC = () => {
   ];
 
   return (
-    <div className="h-full flex flex-col bg-studio-900 border-l border-studio-750 text-slate-200 overflow-y-auto">
+    <div className="h-full flex flex-col bg-studio-900 border-l border-studio-750 text-slate-200 overflow-y-auto select-none" data-testid="inspector-panel">
       {/* Inspector Header */}
       <div className="p-3 border-b border-studio-750 flex items-center justify-between">
         <div>
           <span className="font-semibold text-xs uppercase tracking-wider text-slate-300">
             Inspector
           </span>
-          <p className="text-[11px] text-blue-400 font-medium truncate max-w-[200px] mt-0.5">
+          <p className="text-[11px] text-blue-400 font-medium truncate max-w-[200px] mt-0.5" id="inspector-clip-name">
             {clip.name}
           </p>
         </div>
@@ -82,6 +81,7 @@ export const Inspector: React.FC = () => {
             <div>
               <label className="text-[10px] text-slate-400 mb-1 block">Position X (px)</label>
               <input
+                id="input-pos-x"
                 type="number"
                 value={clip.transform.position.x}
                 onChange={(e) =>
@@ -95,6 +95,7 @@ export const Inspector: React.FC = () => {
             <div>
               <label className="text-[10px] text-slate-400 mb-1 block">Position Y (px)</label>
               <input
+                id="input-pos-y"
                 type="number"
                 value={clip.transform.position.y}
                 onChange={(e) =>
@@ -113,6 +114,7 @@ export const Inspector: React.FC = () => {
               <span>Scale ({Math.round(clip.transform.scale.x * 100)}%)</span>
             </div>
             <input
+              id="slider-scale"
               type="range"
               min="0.1"
               max="3.0"
@@ -132,6 +134,7 @@ export const Inspector: React.FC = () => {
               <span>Rotation ({clip.transform.rotation}°)</span>
             </div>
             <input
+              id="slider-rotation"
               type="range"
               min="-180"
               max="180"
@@ -149,6 +152,7 @@ export const Inspector: React.FC = () => {
               <span>Opacity ({Math.round(clip.transform.opacity * 100)}%)</span>
             </div>
             <input
+              id="slider-opacity"
               type="range"
               min="0"
               max="1"
@@ -172,6 +176,7 @@ export const Inspector: React.FC = () => {
           <div>
             <label className="text-[10px] text-slate-400 mb-1 block">Blend Mode</label>
             <select
+              id="select-blend-mode"
               value={clip.blendMode}
               onChange={(e) => updateBlendMode(clip.id, e.target.value as BlendMode)}
               className="w-full bg-studio-950 border border-studio-800 rounded px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 capitalize"
@@ -192,29 +197,56 @@ export const Inspector: React.FC = () => {
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Video Effects</span>
             </div>
-            <div className="flex items-center space-x-1">
-              <button
-                onClick={() => addEffect(clip.id, 'film_grain', { intensity: 0.25 })}
-                title="Add 35mm Film Grain"
-                className="px-1.5 py-0.5 rounded bg-studio-800 text-[9px] font-mono text-amber-400 hover:bg-studio-750"
-              >
-                + Grain
-              </button>
-              <button
-                onClick={() => addEffect(clip.id, 'vignette', { amount: 0.6 })}
-                title="Add Vignette"
-                className="px-1.5 py-0.5 rounded bg-studio-800 text-[9px] font-mono text-blue-400 hover:bg-studio-750"
-              >
-                + Vignette
-              </button>
-            </div>
+          </div>
+
+          {/* Effect Action Buttons */}
+          <div className="grid grid-cols-2 gap-1.5 pt-1">
+            <button
+              id="btn-add-vignette"
+              onClick={() => addEffect(clip.id, 'vignette', { amount: 0.6 })}
+              title="Add Vignette Shader"
+              className="px-2 py-1 rounded bg-studio-800 hover:bg-studio-750 text-[10px] font-mono text-blue-400 hover:text-blue-300 transition-colors text-left"
+            >
+              + Vignette
+            </button>
+            <button
+              id="btn-add-grain"
+              onClick={() => addEffect(clip.id, 'film_grain', { intensity: 0.25 })}
+              title="Add 35mm Film Grain Shader"
+              className="px-2 py-1 rounded bg-studio-800 hover:bg-studio-750 text-[10px] font-mono text-amber-400 hover:text-amber-300 transition-colors text-left"
+            >
+              + Film Grain
+            </button>
+            <button
+              id="btn-add-color-grade"
+              onClick={() =>
+                addEffect(clip.id, 'color_grade', {
+                  contrast: 1.25,
+                  brightness: 0.05,
+                  saturation: 1.3,
+                })
+              }
+              title="Add Color Grade"
+              className="px-2 py-1 rounded bg-studio-800 hover:bg-studio-750 text-[10px] font-mono text-emerald-400 hover:text-emerald-300 transition-colors text-left"
+            >
+              + Color Grade
+            </button>
+            <button
+              id="btn-add-blur"
+              onClick={() => addEffect(clip.id, 'blur', { radius: 10 })}
+              title="Add Gaussian Blur"
+              className="px-2 py-1 rounded bg-studio-800 hover:bg-studio-750 text-[10px] font-mono text-purple-400 hover:text-purple-300 transition-colors text-left"
+            >
+              + Blur
+            </button>
           </div>
 
           {/* Active Effects */}
-          <div className="space-y-1.5 mt-2">
+          <div className="space-y-1.5 mt-2" data-testid="effects-stack">
             {clip.effects.map((effect) => (
               <div
                 key={effect.id}
+                data-testid={`effect-item-${effect.effectType || effect.id}`}
                 className="p-2 rounded bg-studio-950 border border-studio-800 flex items-center justify-between"
               >
                 <div>
@@ -222,10 +254,9 @@ export const Inspector: React.FC = () => {
                   <p className="text-[10px] text-slate-500 font-mono">GPU Shader Pass</p>
                 </div>
                 <button
-                  onClick={() => {
-                    clip.effects = clip.effects.filter((e) => e.id !== effect.id);
-                    useEditorStore.setState({ sequence: { ...sequence } });
-                  }}
+                  data-testid={`btn-remove-effect-${effect.id}`}
+                  onClick={() => removeEffect(clip.id, effect.id)}
+                  title="Remove effect"
                   className="p-1 rounded text-slate-500 hover:text-red-400 transition-colors"
                 >
                   <Trash2 className="w-3 h-3" />
@@ -256,6 +287,7 @@ export const Inspector: React.FC = () => {
               </span>
             </div>
             <input
+              id="slider-volume"
               type="range"
               min="0"
               max="2.0"
@@ -278,6 +310,7 @@ export const Inspector: React.FC = () => {
               </span>
             </div>
             <input
+              id="slider-pan"
               type="range"
               min="-1.0"
               max="1.0"
@@ -292,4 +325,3 @@ export const Inspector: React.FC = () => {
     </div>
   );
 };
-

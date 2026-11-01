@@ -1,0 +1,346 @@
+{
+  "version": "0.1.0",
+  "savedAt": 1793549777514,
+  "assets": [
+    {
+      "id": "asset_1793549766632_121x",
+      "name": "video_clip1.mp4",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\video_clip1.mp4",
+      "mediaType": "video",
+      "duration": {
+        "value": "6",
+        "timescale": 1
+      },
+      "width": 1920,
+      "height": 1080,
+      "fps": 24,
+      "dateAdded": 1793549766632
+    },
+    {
+      "id": "asset_1793549766696_zapr",
+      "name": "video_clip2.mp4",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\video_clip2.mp4",
+      "mediaType": "video",
+      "duration": {
+        "value": "6",
+        "timescale": 1
+      },
+      "width": 1920,
+      "height": 1080,
+      "fps": 24,
+      "dateAdded": 1793549766696
+    },
+    {
+      "id": "asset_1793549766754_m1zu",
+      "name": "overlay_graphic.png",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\overlay_graphic.png",
+      "mediaType": "image",
+      "duration": {
+        "value": "5",
+        "timescale": 1
+      },
+      "width": 400,
+      "height": 200,
+      "fps": 25,
+      "dateAdded": 1793549766754
+    },
+    {
+      "id": "asset_1793549766836_z1lp",
+      "name": "audio_track.wav",
+      "filePath": "C:\\Users\\Poojak Doshi\\.gemini\\antigravity\\scratch\\frameforge-studio\\tests\\fixtures\\media\\audio_track.wav",
+      "mediaType": "audio",
+      "duration": {
+        "value": "10",
+        "timescale": 1
+      },
+      "fps": 24,
+      "dateAdded": 1793549766836
+    }
+  ],
+  "sequence": {
+    "id": "seq_1793549766129_vlqu2",
+    "name": "Sequence 1",
+    "fps": 24,
+    "width": 1920,
+    "height": 1080,
+    "tracks": [
+      {
+        "id": "track_video_0_hbenl",
+        "name": "V3",
+        "kind": "video",
+        "index": 0,
+        "muted": false,
+        "solo": false,
+        "locked": false,
+        "clips": [
+          {
+            "id": "clip_1793549770511_sd42j",
+            "name": "video_clip1",
+            "assetId": "asset_1793549766632_121x",
+            "trackId": "track_video_0_hbenl",
+            "timelineRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "1",
+                "timescale": 24
+              }
+            },
+            "sourceRange": {
+              "start": {
+                "value": "71",
+                "timescale": 12
+              },
+              "duration": {
+                "value": "1",
+                "timescale": 24
+              }
+            },
+            "speed": 1,
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "scale": {
+                "x": 1,
+                "y": 1
+              },
+              "rotation": 0,
+              "anchor": {
+                "x": 0.5,
+                "y": 0.5
+              },
+              "opacity": 1
+            },
+            "blendMode": "normal",
+            "effects": [],
+            "volume": 1,
+            "pan": 0,
+            "color": "#2563eb"
+          }
+        ]
+      },
+      {
+        "id": "track_video_1_jr1fz",
+        "name": "V2",
+        "kind": "video",
+        "index": 1,
+        "muted": false,
+        "solo": false,
+        "locked": false,
+        "clips": [
+          {
+            "id": "clip_1793549771824_zq48p",
+            "name": "overlay_graphic",
+            "assetId": "asset_1793549766754_m1zu",
+            "trackId": "track_video_1_jr1fz",
+            "timelineRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "9",
+                "timescale": 2
+              }
+            },
+            "sourceRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "9",
+                "timescale": 2
+              }
+            },
+            "speed": 1,
+            "transform": {
+              "position": {
+                "x": 120,
+                "y": 60
+              },
+              "scale": {
+                "x": 1,
+                "y": 1
+              },
+              "rotation": 0,
+              "anchor": {
+                "x": 0.5,
+                "y": 0.5
+              },
+              "opacity": 0.86
+            },
+            "blendMode": "normal",
+            "effects": [
+              {
+                "id": "eff_1793549775419_gx9w",
+                "effectType": "vignette",
+                "name": "VIGNETTE",
+                "enabled": true,
+                "parameters": {
+                  "amount": 0.6
+                }
+              },
+              {
+                "id": "eff_1793549775669_joa7",
+                "effectType": "film_grain",
+                "name": "FILM_GRAIN",
+                "enabled": true,
+                "parameters": {
+                  "intensity": 0.25
+                }
+              },
+              {
+                "id": "eff_1793549775919_zyqh",
+                "effectType": "color_grade",
+                "name": "COLOR_GRADE",
+                "enabled": true,
+                "parameters": {
+                  "contrast": 1.25,
+                  "brightness": 0.05,
+                  "saturation": 1.3
+                }
+              }
+            ],
+            "volume": 1,
+            "pan": 0,
+            "color": "#7c3aed"
+          }
+        ]
+      },
+      {
+        "id": "track_video_2_k3ua2",
+        "name": "V1",
+        "kind": "video",
+        "index": 2,
+        "muted": false,
+        "solo": false,
+        "locked": false,
+        "clips": [
+          {
+            "id": "clip_1793549771297_2gx3f",
+            "name": "video_clip2",
+            "assetId": "asset_1793549766696_zapr",
+            "trackId": "track_video_2_k3ua2",
+            "timelineRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "6",
+                "timescale": 1
+              }
+            },
+            "sourceRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "6",
+                "timescale": 1
+              }
+            },
+            "speed": 1,
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "scale": {
+                "x": 1,
+                "y": 1
+              },
+              "rotation": 0,
+              "anchor": {
+                "x": 0.5,
+                "y": 0.5
+              },
+              "opacity": 1
+            },
+            "blendMode": "normal",
+            "effects": [],
+            "volume": 1,
+            "pan": 0,
+            "color": "#2563eb"
+          }
+        ]
+      },
+      {
+        "id": "track_audio_3_vs4yi",
+        "name": "A1",
+        "kind": "audio",
+        "index": 3,
+        "muted": false,
+        "solo": false,
+        "locked": false,
+        "clips": [
+          {
+            "id": "clip_1793549772358_hy4kr",
+            "name": "audio_track",
+            "assetId": "asset_1793549766836_z1lp",
+            "trackId": "track_audio_3_vs4yi",
+            "timelineRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "10",
+                "timescale": 1
+              }
+            },
+            "sourceRange": {
+              "start": {
+                "value": "0",
+                "timescale": 1
+              },
+              "duration": {
+                "value": "10",
+                "timescale": 1
+              }
+            },
+            "speed": 1,
+            "transform": {
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "scale": {
+                "x": 1,
+                "y": 1
+              },
+              "rotation": 0,
+              "anchor": {
+                "x": 0.5,
+                "y": 0.5
+              },
+              "opacity": 1
+            },
+            "blendMode": "normal",
+            "effects": [],
+            "volume": 1,
+            "pan": 0,
+            "color": "#059669"
+          }
+        ]
+      },
+      {
+        "id": "track_audio_4_ba80x",
+        "name": "A2",
+        "kind": "audio",
+        "index": 4,
+        "muted": false,
+        "solo": false,
+        "locked": false,
+        "clips": []
+      }
+    ],
+    "markers": []
+  }
+}

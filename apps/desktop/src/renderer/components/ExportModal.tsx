@@ -45,8 +45,10 @@ export const ExportModal: React.FC = () => {
       // 1. Prompt native file save dialog if in Electron
       let targetPath: string | null = null;
       if (window.frameforge?.saveExportDialog) {
+        const preset = (window as any).__presetExportPath;
         targetPath = await window.frameforge.saveExportDialog(
-          `${sequence.name.replace(/\s+/g, '_')}_master.mp4`
+          `${sequence.name.replace(/\s+/g, '_')}_master.mp4`,
+          preset
         );
         if (!targetPath) {
           setIsExporting(false);
@@ -177,6 +179,7 @@ export const ExportModal: React.FC = () => {
               Delivery Preset
             </label>
             <select
+              id="select-export-preset"
               value={selectedPresetKey}
               onChange={(e) => setSelectedPresetKey(e.target.value)}
               disabled={isExporting}
@@ -224,6 +227,7 @@ export const ExportModal: React.FC = () => {
               Text Overlay / Watermark Title
             </label>
             <input
+              id="input-watermark-text"
               type="text"
               value={watermarkText}
               onChange={(e) => setWatermarkText(e.target.value)}
@@ -290,7 +294,7 @@ export const ExportModal: React.FC = () => {
 
           {/* Export Complete Notice */}
           {exportComplete && (
-            <div className="p-3 rounded bg-emerald-950/40 border border-emerald-800/60 flex items-start space-x-2 text-emerald-300">
+            <div id="export-complete-notice" className="p-3 rounded bg-emerald-950/40 border border-emerald-800/60 flex items-start space-x-2 text-emerald-300">
               <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-xs">Production Master Exported Successfully!</p>
@@ -314,6 +318,7 @@ export const ExportModal: React.FC = () => {
           </div>
           <div className="flex items-center space-x-2">
             <button
+              id="btn-close-export"
               onClick={() => setExportModalOpen(false)}
               className="px-3.5 py-1.5 rounded bg-studio-800 hover:bg-studio-750 text-slate-300 text-xs font-medium transition-colors"
             >
@@ -321,6 +326,7 @@ export const ExportModal: React.FC = () => {
             </button>
             {!exportComplete && (
               <button
+                id="btn-start-export"
                 onClick={handleStartExport}
                 disabled={isExporting}
                 className="px-4 py-1.5 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-md shadow-blue-900/30 transition-colors"

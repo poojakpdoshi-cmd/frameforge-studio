@@ -32,6 +32,7 @@ protocol.registerSchemesAsPrivileged([
       secure: true,
       standard: true,
       supportFetchAPI: true,
+      corsEnabled: true,
       stream: true,
       bypassCSP: true,
     },
@@ -64,13 +65,30 @@ function createWindow() {
 
 app.whenReady().then(() => {
   // Register media protocol for streaming local files
-  protocol.handle('media', (request) => {
-    let filePath = decodeURIComponent(request.url.replace(/^media:\/\//, ''));
-    // Handle Windows drive paths like media://C:/path
-    if (process.platform === 'win32' && /^[a-zA-Z]:/.test(filePath)) {
-      filePath = filePath.replace(/\\/g, '/');
+  protocol.handle('media', async (request) => {
+    try {
+      const parsed = new URL(request.url);
+      let filePath = decodeURIComponent(parsed.pathname);
+      if (process.platform === 'win32') {
+        if (filePath.startsWith('/') && /^[a-zA-Z]:/.test(filePath.slice(1))) {
+          filePath = filePath.slice(1);
+        } else if (parsed.host && parsed.host.length === 1 && /^[a-zA-Z]$/.test(parsed.host)) {
+          filePath = `${parsed.host}:${filePath}`;
+        }
+      }
+      const response = await net.fetch(pathToFileURL(filePath).toString());
+      const headers = new Headers(response.headers);
+      headers.set('Access-Control-Allow-Origin', '*');
+      headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
+    } catch (err) {
+      console.error('[Media Protocol Error]', err);
+      return new Response('Media Not Found', { status: 404 });
     }
-    return net.fetch(pathToFileURL(filePath).toString());
   });
 
   createWindow();
@@ -80,7 +98,10 @@ app.whenReady().then(() => {
   }
 
   // 1. Native File Open Dialog
-  ipcMain.handle('dialog:openMediaFile', async () => {
+  ipcMain.handle('dialog:openMediaFile', async (_event, presetPaths?: string[]) => {
+    if (presetPaths && Array.isArray(presetPaths) && presetPaths.length > 0) {
+      return presetPaths;
+    }
     if (!mainWindow) return null;
     const result = await dialog.showOpenDialog(mainWindow, {
       title: 'Import Media — FrameForge Studio',
@@ -99,7 +120,10 @@ app.whenReady().then(() => {
   });
 
   // 1b. Native Export Destination Dialog
-  ipcMain.handle('dialog:saveExportFile', async (_event, defaultName?: string) => {
+  ipcMain.handle('dialog:saveExportFile', async (_event, defaultName?: string, presetPath?: string) => {
+    if (presetPath && typeof presetPath === 'string') {
+      return presetPath;
+    }
     if (!mainWindow) return null;
     const saveRes = await dialog.showSaveDialog(mainWindow, {
       title: 'Export Rendered Video — FrameForge Studio',
@@ -135,10 +159,12 @@ app.whenReady().then(() => {
   // 3. Real FFmpeg Render Execution
   ipcMain.handle('render:export', async (_event, args: string[]) => {
     try {
-      const { stdout, stderr } = await execFileAsync('ffmpeg', args);
+      console.log('[Main Process FFmpeg Arguments]', args.join(' '));
+      const { stdout, stderr } = await execFileAsync('ffmpeg', args, { maxBuffer: 20 * 1024 * 1024 });
       return { success: true, stdout, stderr };
     } catch (err: any) {
-      return { success: false, error: err.message };
+      console.error('[Main Process FFmpeg Error]', err.message, err.stderr);
+      return { success: false, error: err.message, stderr: err.stderr };
     }
   });
 

@@ -50,6 +50,9 @@ coverage/
 # Project temporary export scratch
 .user-data/
 apps/.user-data/
+.user-data-e2e/
+tests/artifacts/workflow_frames/
+tests/artifacts/raw_video/
 acceptance_evidence/*.mp4
 exports/
 proxies/

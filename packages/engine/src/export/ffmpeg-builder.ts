@@ -203,42 +203,50 @@ export class FFmpegCommandBuilder {
     // Build filter complex
     const filterComplex: string[] = [];
 
-    // Process Video 1
-    let v0Chain = `[0:v]trim=start=${videoInputs[0].trimStart}:duration=${videoInputs[0].duration},setpts=PTS-STARTPTS,scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2`;
-    if (videoInputs[0].effects?.includes('vignette')) {
-      v0Chain += `,vignette=PI/4`;
+    const applyEffects = (chain: string, effects?: string[]): string => {
+      if (!effects) return chain;
+      let res = chain;
+      for (const eff of effects) {
+        const e = eff.toLowerCase();
+        if (e.includes('vignette')) {
+          res += `,vignette=PI/4`;
+        }
+        if (e.includes('grain') || e.includes('noise')) {
+          res += `,noise=alls=15:allf=t+u`;
+        }
+        if (e.includes('color') || e.includes('grade')) {
+          res += `,eq=contrast=1.2:brightness=0.04:saturation=1.3`;
+        }
+        if (e.includes('blur')) {
+          res += `,gblur=sigma=10`;
+        }
+        if (e.includes('chromatic') || e.includes('aberration')) {
+          res += `,rgbashift=rh=4:bv=-4`;
+        }
+      }
+      return res;
+    };
+
+    // Process all video inputs into normalized streams
+    const vNodes: string[] = [];
+    for (let i = 0; i < videoInputs.length; i++) {
+      const v = videoInputs[i];
+      let vChain = `[${i}:v]trim=start=${v.trimStart}:duration=${v.duration},setpts=PTS-STARTPTS,scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2`;
+      vChain = applyEffects(vChain, v.effects);
+      vChain += `[v${i}]`;
+      filterComplex.push(vChain);
+      vNodes.push(`[v${i}]`);
     }
-    if (videoInputs[0].effects?.includes('blur')) {
-      v0Chain += `,gblur=sigma=10`;
-    }
-    v0Chain += `[v0]`;
-    filterComplex.push(v0Chain);
 
-    let currentVideoNode = '[v0]';
+    let currentVideoNode = vNodes[0] || '[0:v]';
 
-    // Process Video 2 (if present)
-    if (videoInputs.length > 1) {
-      let v1Chain = `[1:v]trim=start=${videoInputs[1].trimStart}:duration=${videoInputs[1].duration},setpts=PTS-STARTPTS,scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2`;
-      if (videoInputs[1].effects?.includes('color_grade')) {
-        v1Chain += `,eq=contrast=1.2:brightness=0.04:saturation=1.3`;
-      }
-      if (videoInputs[1].effects?.includes('film_grain')) {
-        v1Chain += `,noise=alls=15:allf=t+u`;
-      }
-      if (videoInputs[1].effects?.includes('blur')) {
-        v1Chain += `,gblur=sigma=10`;
-      }
-      v1Chain += `[v1]`;
-      filterComplex.push(v1Chain);
-
-      // Transition between v0 and v1
-      if (transition) {
-        filterComplex.push(
-          `[v0][v1]xfade=transition=${transition.type}:duration=${transition.duration}:offset=${transition.offset}[base]`
-        );
-      } else {
-        filterComplex.push(`[v0][v1]concat=n=2:v=1:a=0[base]`);
-      }
+    if (vNodes.length === 2 && transition) {
+      filterComplex.push(
+        `[v0][v1]xfade=transition=${transition.type}:duration=${transition.duration}:offset=${transition.offset}[base]`
+      );
+      currentVideoNode = '[base]';
+    } else if (vNodes.length > 1) {
+      filterComplex.push(`${vNodes.join('')}concat=n=${vNodes.length}:v=1:a=0[base]`);
       currentVideoNode = '[base]';
     }
 
@@ -252,7 +260,9 @@ export class FFmpegCommandBuilder {
 
     // Overlay Text
     if (textOverlay) {
-      const fontArg = process.platform === 'win32'
+      const isWin = (typeof process !== 'undefined' && process.platform === 'win32') ||
+        (typeof navigator !== 'undefined' && /win/i.test((navigator.userAgent || '') + (navigator.platform || '')));
+      const fontArg = isWin
         ? ":fontfile='C\\:/Windows/Fonts/arial.ttf'"
         : '';
       filterComplex.push(
@@ -342,17 +352,20 @@ export class FFmpegCommandBuilder {
       };
     }
 
-    // Determine transition if 2 video clips overlap
+    // Determine transition if exactly 2 video clips overlap
     let transition: { type: 'fade'; duration: number; offset: number } | undefined;
-    if (videoClips.length >= 2) {
+    if (videoClips.length === 2) {
       const c0End = videoClips[0].clip.timelineRange.endSeconds;
       const c1Start = videoClips[1].clip.timelineRange.startSeconds;
       if (c0End > c1Start) {
         const dur = Math.min(2.0, c0End - c1Start);
+        const v0Dur = videoInputs[0].duration;
+        const maxOffset = Math.max(0.1, v0Dur - dur);
+        const offset = Math.min(c1Start, maxOffset);
         transition = {
           type: 'fade',
-          duration: dur,
-          offset: c1Start,
+          duration: Math.min(dur, v0Dur / 2),
+          offset,
         };
       }
     }
