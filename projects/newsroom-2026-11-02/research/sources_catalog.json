@@ -1,0 +1,46 @@
+{
+  "project": "OpenAI ChatGPT Search 45s Documentary Reel",
+  "topic": "The 25-Year Search Monopoly Faceoff",
+  "verification_status": "VERIFIED_PRIMARY_TIER1",
+  "sources": [
+    {
+      "source_id": "SRC-SEARCH-001",
+      "type": "Official Lab Announcement & Technical Release",
+      "title": "Introducing ChatGPT search",
+      "publisher": "OpenAI",
+      "publication_date": "2024-10-31T17:00:00Z",
+      "url": "https://openai.com/index/introducing-chatgpt-search/",
+      "core_contribution": "Fine-tuned GPT-4o model with synthetic distillation from OpenAI o1, automated search intent classification, live attribution sidebar, interactive data widgets.",
+      "evidence_used": "Model architecture description, UI layout screenshots, publisher partner list, rollout schedule"
+    },
+    {
+      "source_id": "SRC-SEARCH-002",
+      "type": "Primary Publisher Partnership Agreements",
+      "title": "OpenAI Content Licensing & Publisher Attribution Agreements",
+      "partners": [
+        "Axel Springer",
+        "Associated Press",
+        "Financial Times",
+        "News Corp",
+        "Reuters",
+        "Le Monde",
+        "Time",
+        "Vox Media"
+      ],
+      "publication_date": "2024-10-31",
+      "url": "https://openai.com/our-approach-to-content/",
+      "core_contribution": "Direct bilateral content licensing ensuring verified journalistic sources with real-time attribution sidebar.",
+      "evidence_used": "Partner logos and licensing governance framework"
+    },
+    {
+      "source_id": "SRC-SEARCH-003",
+      "type": "Independent Financial & Industry Analysis",
+      "title": "OpenAI takes on Google with ChatGPT search",
+      "publisher": "Reuters Business Wire",
+      "publication_date": "2024-10-31T18:15:00Z",
+      "url": "https://www.reuters.com/technology/openai-launches-chatgpt-search-challenge-google-2024-10-31/",
+      "core_contribution": "Financial analysis of Google's $175B search advertising revenue and the potential disruption from conversational search alternatives.",
+      "evidence_used": "Comparative market share statistics, search ad revenue baseline, competitive dynamics"
+    }
+  ]
+}

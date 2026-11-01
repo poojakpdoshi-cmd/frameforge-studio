@@ -1,0 +1,76 @@
+{
+  "project": "pi0-robotics-reel",
+  "resolution": {
+    "target_width": 1080,
+    "target_height": 1920,
+    "evidence_viewport": {
+      "width": 1080,
+      "height": 960,
+      "position_y": -480
+    },
+    "presenter_viewport": {
+      "width": 1080,
+      "height": 960,
+      "position_y": 480
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "AST-IMG-001",
+      "filename": "fig1_pi0_architecture.png",
+      "path": "projects/pi0-robotics-reel/assets/images/fig1_pi0_architecture.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Pi-Zero Architectural Topology",
+      "provenance": "Generated based on arXiv:2410.24164 Figure 2",
+      "content": "PaliGemma VLM (SigLIP vision + Gemma language) conditioning continuous Flow Matching action expert outputting 50 Hz multi-joint trajectories",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-IMG-002",
+      "filename": "fig2_laundry_folding.png",
+      "path": "projects/pi0-robotics-reel/assets/images/fig2_laundry_folding.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Autonomous Laundry Folding Empirical Benchmark",
+      "provenance": "Physical Intelligence Demonstration Suite",
+      "content": "3-stage sequence breakdown: dryer retrieval, surface smoothing, bimanual folding of deformable cloth",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-IMG-003",
+      "filename": "fig3_robot_embodiments.png",
+      "path": "projects/pi0-robotics-reel/assets/images/fig3_robot_embodiments.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Cross-Embodiment Co-Training Matrix",
+      "provenance": "arXiv:2410.24164 Section 4",
+      "content": "7 distinct robotic platforms (Dual UR5e, Franka Emika Panda, Mobile Bi-Manual, ViperX) sharing a single unified foundation weights checkpoint",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-IMG-004",
+      "filename": "fig4_action_frequency_chart.png",
+      "path": "projects/pi0-robotics-reel/assets/images/fig4_action_frequency_chart.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Action Frequency Delta: Discrete vs Continuous",
+      "provenance": "arXiv:2410.24164 Table 2",
+      "content": "Comparative bar chart: RT-2 3 Hz discrete tokenization vs Pi-Zero 50 Hz continuous flow matching with 20ms human-equivalent latency",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-VID-001",
+      "filename": "demo_laundry_folding.mp4",
+      "path": "projects/pi0-robotics-reel/assets/video/demo_laundry_folding.mp4",
+      "type": "video/mp4",
+      "dimensions": "1080x960",
+      "duration_seconds": 10.0,
+      "framerate": 30.0,
+      "title": "Live 50 Hz Dynamic Telemetry Simulation",
+      "provenance": "Physical Intelligence Autonomous Benchmark Telemetry",
+      "content": "Real-time 50 Hz joint trajectory flow vector integration and dynamic cloth re-grasping telemetry",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    }
+  ]
+}

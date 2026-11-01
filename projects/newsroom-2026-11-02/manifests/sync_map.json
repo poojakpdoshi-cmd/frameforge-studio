@@ -1,0 +1,241 @@
+{
+  "project": "newsroom-2026-11-02",
+  "timeline_duration_seconds": 45.0,
+  "framerate": 30.0,
+  "total_frames": 1350,
+  "canvas": {
+    "width": 1080,
+    "height": 1920
+  },
+  "segments": [
+    {
+      "segment_id": "SEG-01",
+      "start_time": 0.0,
+      "end_time": 3.0,
+      "duration": 3.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "Why scroll through ten ad-bloated links when AI can answer instantly?",
+      "word_count": 10,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 0,
+          "end_frame": 90,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig2_ten_blue_links_vs_ai.png",
+          "start_frame": 0,
+          "end_frame": 90,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "THE 25-YEAR SEARCH MONOPOLY",
+          "position": { "x": 0, "y": -20 },
+          "color": "#ef4444"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-02",
+      "start_time": 3.0,
+      "end_time": 6.0,
+      "duration": 3.0,
+      "layout_mode": "LAYOUT_B",
+      "spoken_script": "I'm Poojak Doshi, researching the next frontier in artificial intelligence.",
+      "word_count": 10,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 90,
+          "end_frame": 180,
+          "transform": {
+            "position": { "x": 0, "y": 0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": null,
+        "V3_overlay": {
+          "type": "lower_third",
+          "title": "POOJAK DOSHI",
+          "subtitle": "AI & Tech Research",
+          "position": { "x": 0, "y": 700 }
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-03",
+      "start_time": 6.0,
+      "end_time": 13.0,
+      "duration": 7.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "For twenty-five years, web search meant blue links and ads. OpenAI just replaced that paradigm with ChatGPT search.",
+      "word_count": 18,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 180,
+          "end_frame": 390,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig2_ten_blue_links_vs_ai.png",
+          "start_frame": 180,
+          "end_frame": 390,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "GOOGLE GLOBAL SHARE: 91% -> DISRUPTION BEGINS",
+          "position": { "x": 0, "y": -20 },
+          "color": "#38bdf8"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-04",
+      "start_time": 13.0,
+      "end_time": 23.0,
+      "duration": 10.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "Powered by a fine-tuned GPT-4o distilled from reasoning model o1, it dynamically crawls the live web, synthesizing verified facts in seconds.",
+      "word_count": 22,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 390,
+          "end_frame": 690,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig1_search_architecture.png",
+          "start_frame": 390,
+          "end_frame": 690,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "ARCHITECTURE: GPT-4o + o1 DISTILLATION",
+          "position": { "x": 0, "y": -20 },
+          "color": "#10b981"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-05",
+      "start_time": 23.0,
+      "end_time": 33.0,
+      "duration": 10.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "It renders interactive weather radar, stock charts, and direct source sidebars licensed from Reuters and the Financial Times.",
+      "word_count": 18,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 690,
+          "end_frame": 990,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "demo_search_experience.mp4",
+          "start_frame": 690,
+          "end_frame": 990,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "PARTNERS: REUTERS • FT • AXEL SPRINGER",
+          "position": { "x": 0, "y": -20 },
+          "color": "#38bdf8"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-06",
+      "start_time": 33.0,
+      "end_time": 40.0,
+      "duration": 7.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "The bottleneck? Neural inference costs ten times more than keyword search, and publishers worry about losing direct traffic.",
+      "word_count": 18,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 990,
+          "end_frame": 1200,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig4_inference_cost_chart.png",
+          "start_frame": 990,
+          "end_frame": 1200,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "CHALLENGE: 40x INFERENCE COST MULTIPLIER",
+          "position": { "x": 0, "y": -20 },
+          "color": "#f59e0b"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-07",
+      "start_time": 40.0,
+      "end_time": 45.0,
+      "duration": 5.0,
+      "layout_mode": "LAYOUT_B",
+      "spoken_script": "The search monopoly has cracked. How we access knowledge will never be the same.",
+      "word_count": 14,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 1200,
+          "end_frame": 1350,
+          "transform": {
+            "position": { "x": 0, "y": 0 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": null,
+        "V3_overlay": {
+          "type": "lower_third",
+          "title": "POOJAK DOSHI",
+          "subtitle": "Follow for Daily AI Research Investigations",
+          "position": { "x": 0, "y": 700 }
+        }
+      }
+    }
+  ]
+}

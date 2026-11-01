@@ -1,0 +1,105 @@
+{
+  "evaluation_date": "2026-11-02T01:08:48+05:30",
+  "scoring_rubric": {
+    "dimensions": [
+      { "name": "impact", "max_points": 25, "description": "Magnitude of change for industry, developers, or society" },
+      { "name": "novelty", "max_points": 20, "description": "Tangible breakthrough vs incremental marketing update" },
+      { "name": "evidence", "max_points": 20, "description": "Direct access to primary papers, code, datasets, or video" },
+      { "name": "relevance", "max_points": 15, "description": "Worldwide significance beyond localized hype" },
+      { "name": "technical", "max_points": 10, "description": "Novel algorithmic, hardware, or architectural insight" },
+      { "name": "visual", "max_points": 10, "description": "Suitability for dynamic diagrams, charts, and video evidence" }
+    ]
+  },
+  "ranked_candidates": [
+    {
+      "rank": 1,
+      "candidate_id": "STORY-20261102-01",
+      "headline": "OpenAI Officially Launches ChatGPT Search: The Direct Challenge to Google's 25-Year Search Monopoly",
+      "organization": "OpenAI",
+      "category": "Frontier AI & Search Infrastructure",
+      "scores": {
+        "impact": 25,
+        "novelty": 19,
+        "evidence": 19,
+        "relevance": 15,
+        "technical": 9,
+        "visual": 9,
+        "total": 96
+      },
+      "selection_status": "SELECTED_WINNER",
+      "verdict": "Highest scoring global story. Directly impacts over 250 million active users worldwide, fundamentally shifts the web search paradigm from 10 blue links to conversational multimodal synthesis, backed by primary engineering documentation and live developer access."
+    },
+    {
+      "rank": 2,
+      "candidate_id": "STORY-20261102-02",
+      "headline": "Physical Intelligence Unveils pi-0: Continuous Flow Matching Action Model for 50 Hz Robotics",
+      "organization": "Physical Intelligence",
+      "category": "Robotics & Physical AI",
+      "scores": {
+        "impact": 21,
+        "novelty": 19,
+        "evidence": 20,
+        "relevance": 13,
+        "technical": 10,
+        "visual": 10,
+        "total": 93
+      },
+      "selection_status": "REJECTED_RUNNER_UP",
+      "rejection_reason": "Exceptional technical paper and robotics milestone, but already thoroughly covered in yesterday's pre-production cycle (RES-PI0-2026-001). Selecting it today would violate the core requirement: 'Do not restrict research to one company, country, technology, or previously used topic.'"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "STORY-20261102-03",
+      "headline": "Hugging Face Releases SmolLM2: 135M, 360M, and 1.7B Parameter Models for Local On-Device AI",
+      "organization": "Hugging Face (HuggingFaceTB)",
+      "category": "Open-Source & Edge AI",
+      "scores": {
+        "impact": 18,
+        "novelty": 17,
+        "evidence": 20,
+        "relevance": 13,
+        "technical": 8,
+        "visual": 8,
+        "total": 84
+      },
+      "selection_status": "REJECTED",
+      "rejection_reason": "Strong open-source milestone proving high dataset filtering efficiency on edge devices, but lower mainstream impact compared to the global disruption of internet search."
+    },
+    {
+      "rank": 4,
+      "candidate_id": "STORY-20261102-04",
+      "headline": "Anthropic Claude 3.5 Sonnet Computer Use API Expansion",
+      "organization": "Anthropic",
+      "category": "AI Agents & Autonomous Software",
+      "scores": {
+        "impact": 22,
+        "novelty": 12,
+        "evidence": 18,
+        "relevance": 14,
+        "technical": 9,
+        "visual": 9,
+        "total": 84
+      },
+      "selection_status": "REJECTED_STALE",
+      "rejection_reason": "Failed 24-hour freshness gate. The primary engineering launch was October 22, 2024. Current articles are secondary commentary and implementation writeups, not breaking news."
+    },
+    {
+      "rank": 5,
+      "candidate_id": "STORY-20261102-05",
+      "headline": "Google DeepMind Scales Gemini 1.5 Flash-8B Production Deployments",
+      "organization": "Google DeepMind",
+      "category": "Model Economics",
+      "scores": {
+        "impact": 16,
+        "novelty": 10,
+        "evidence": 17,
+        "relevance": 11,
+        "technical": 7,
+        "visual": 6,
+        "total": 67
+      },
+      "selection_status": "REJECTED_STALE",
+      "rejection_reason": "Incremental steady-state cloud rollout. Insufficient narrative tension and novelty for a standalone investigative documentary."
+    }
+  ]
+}

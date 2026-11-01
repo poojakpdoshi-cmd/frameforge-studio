@@ -1,0 +1,245 @@
+{
+  "project": "pi0-robotics-reel",
+  "timeline_duration_seconds": 45.0,
+  "framerate": 30.0,
+  "total_frames": 1350,
+  "canvas": {
+    "width": 1080,
+    "height": 1920
+  },
+  "segments": [
+    {
+      "segment_id": "SEG-01",
+      "start_time": 0.0,
+      "end_time": 3.0,
+      "duration": 3.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "Why can AI write code, but struggle to fold laundry?",
+      "word_count": 9,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 0,
+          "end_frame": 90,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 },
+            "crop": { "top": 480, "bottom": 0, "left": 0, "right": 0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig4_action_frequency_chart.png",
+          "start_frame": 0,
+          "end_frame": 90,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 },
+            "opacity": 1.0
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "THE PHYSICAL AI PARADOX",
+          "position": { "x": 0, "y": -20 },
+          "color": "#ef4444"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-02",
+      "start_time": 3.0,
+      "end_time": 6.0,
+      "duration": 3.0,
+      "layout_mode": "LAYOUT_B",
+      "spoken_script": "I'm Poojak Doshi, researching the next frontier in physical intelligence.",
+      "word_count": 9,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 90,
+          "end_frame": 180,
+          "transform": {
+            "position": { "x": 0, "y": 0 },
+            "scale": { "x": 1.0, "y": 1.0 },
+            "crop": "none (full vertical 1080x1920)"
+          }
+        },
+        "V2_evidence": null,
+        "V3_overlay": {
+          "type": "lower_third",
+          "title": "POOJAK DOSHI",
+          "subtitle": "AI & Robotics Research",
+          "position": { "x": 0, "y": 700 }
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-03",
+      "start_time": 6.0,
+      "end_time": 14.0,
+      "duration": 8.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "Earlier robot models chopped movement into sluggish three-hertz steps. Enter pi-zero: a generalist foundation model trained on continuous flow matching.",
+      "word_count": 19,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 180,
+          "end_frame": 420,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig4_action_frequency_chart.png",
+          "start_frame": 180,
+          "end_frame": 420,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "arXiv:2410.24164 [cs.RO]",
+          "position": { "x": 0, "y": -20 },
+          "color": "#38bdf8"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-04",
+      "start_time": 14.0,
+      "end_time": 24.0,
+      "duration": 10.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "Instead of discrete text tokens, pi-zero couples a PaliGemma vision backbone with continuous velocity fields, generating fluid motor commands at fifty hertz.",
+      "word_count": 22,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 420,
+          "end_frame": 720,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig1_pi0_architecture.png",
+          "start_frame": 420,
+          "end_frame": 720,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "stat_callout",
+          "text": "50 Hz CONTINUOUS MOTOR VELOCITY",
+          "position": { "x": 0, "y": -20 },
+          "color": "#10b981"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-05",
+      "start_time": 24.0,
+      "end_time": 34.0,
+      "duration": 10.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "That speed enables true dexterity: folding crumpled towels from a dryer, assembling boxes, and controlling seven distinct robot embodiments with one unified brain.",
+      "word_count": 23,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 720,
+          "end_frame": 1020,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "demo_laundry_folding.mp4",
+          "start_frame": 720,
+          "end_frame": 1020,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "ZERO-SHOT CROSS-EMBODIMENT DEXTERITY",
+          "position": { "x": 0, "y": -20 },
+          "color": "#6366f1"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-06",
+      "start_time": 34.0,
+      "end_time": 40.0,
+      "duration": 6.0,
+      "layout_mode": "LAYOUT_A",
+      "spoken_script": "The catch? Real-time flow matching demands workstation-grade GPUs, and soft handling still lacks dense tactile skin sensing.",
+      "word_count": 17,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 1020,
+          "end_frame": 1200,
+          "transform": {
+            "position": { "x": 0, "y": 480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V2_evidence": {
+          "source": "fig2_laundry_folding.png",
+          "start_frame": 1020,
+          "end_frame": 1200,
+          "transform": {
+            "position": { "x": 0, "y": -480 },
+            "scale": { "x": 1.0, "y": 1.0 }
+          }
+        },
+        "V3_overlay": {
+          "type": "badge",
+          "text": "CHALLENGE: COMPUTE & TACTILE SKIN SENSING",
+          "position": { "x": 0, "y": -20 },
+          "color": "#f59e0b"
+        }
+      }
+    },
+    {
+      "segment_id": "SEG-07",
+      "start_time": 40.0,
+      "end_time": 45.0,
+      "duration": 5.0,
+      "layout_mode": "LAYOUT_B",
+      "spoken_script": "Physical AI is finally bridging code to physical reality. The real-world revolution has started.",
+      "word_count": 14,
+      "tracks": {
+        "V1_presenter": {
+          "source": "presenter_camera_raw.mp4",
+          "start_frame": 1200,
+          "end_frame": 1350,
+          "transform": {
+            "position": { "x": 0, "y": 0 },
+            "scale": { "x": 1.0, "y": 1.0 },
+            "crop": "none (full vertical 1080x1920)"
+          }
+        },
+        "V2_evidence": null,
+        "V3_overlay": {
+          "type": "lower_third",
+          "title": "POOJAK DOSHI",
+          "subtitle": "Follow for AI Research Breakdowns",
+          "position": { "x": 0, "y": 700 }
+        }
+      }
+    }
+  ]
+}

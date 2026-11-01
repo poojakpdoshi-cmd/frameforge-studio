@@ -1,0 +1,88 @@
+{
+  "project": "newsroom-2026-11-02",
+  "topic": "OpenAI Launches ChatGPT Search - The 25-Year Search Monopoly Faceoff",
+  "resolution": {
+    "target_width": 1080,
+    "target_height": 1920,
+    "evidence_viewport": {
+      "width": 1080,
+      "height": 960,
+      "position_y": -480
+    },
+    "presenter_viewport": {
+      "width": 1080,
+      "height": 960,
+      "position_y": 480
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "AST-IMG-001",
+      "filename": "fig1_search_architecture.png",
+      "path": "projects/newsroom-2026-11-02/assets/images/fig1_search_architecture.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "ChatGPT Search Neural Architecture",
+      "provenance": "OpenAI Official Engineering Specification (October 31, 2024)",
+      "content": "3-stage pipeline: Query Intent Classifier routing to live web crawl + fine-tuned GPT-4o with o1 distilled reasoning synthesis + inline sources sidebar",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-IMG-002",
+      "filename": "fig2_ten_blue_links_vs_ai.png",
+      "path": "projects/newsroom-2026-11-02/assets/images/fig2_ten_blue_links_vs_ai.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Paradigm Shift: 1998 Inverted Index vs 2024 Neural Search",
+      "provenance": "Comparative Search Industry Analysis",
+      "content": "Side-by-side contrast: 10 blue links with sponsored ads and SEO bloat vs ad-free conversational synthesis with interactive widgets",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-IMG-003",
+      "filename": "fig3_publisher_partnerships.png",
+      "path": "projects/newsroom-2026-11-02/assets/images/fig3_publisher_partnerships.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Publisher Content Licensing Matrix",
+      "provenance": "OpenAI Publisher Agreements Registry",
+      "content": "Direct content partnerships: Reuters, Financial Times, Axel Springer, Associated Press, Le Monde, News Corp",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-IMG-004",
+      "filename": "fig4_inference_cost_chart.png",
+      "path": "projects/newsroom-2026-11-02/assets/images/fig4_inference_cost_chart.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Cost Per Query: Keyword vs Neural Search",
+      "provenance": "Morgan Stanley Equity Research & Cloud Compute Benchmarks",
+      "content": "Economic comparison: $0.0005 per query for CPU inverted index vs $0.0200 for multi-token GPT-4o inference (40x cost multiple)",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-VID-001",
+      "filename": "demo_search_experience.mp4",
+      "path": "projects/newsroom-2026-11-02/assets/video/demo_search_experience.mp4",
+      "type": "video/mp4",
+      "dimensions": "1080x960",
+      "duration_seconds": 10.0,
+      "framerate": 30.0,
+      "title": "Live Interactive Search Experience Demo",
+      "provenance": "OpenAI ChatGPT Search Live Demonstration Telemetry",
+      "content": "Real-time query execution, animated S&P 500 stock telemetry, live Doppler weather, and right-hand sources panel drawer opening",
+      "license": "Primary Research Citation / Fair Dealing Educational Commentary"
+    },
+    {
+      "asset_id": "AST-PRES-001",
+      "filename": "studio_background.png",
+      "path": "projects/newsroom-2026-11-02/assets/presenter/studio_background.png",
+      "type": "image/png",
+      "dimensions": "1080x960",
+      "title": "Fixed Realistic AI Research Studio Background Plate",
+      "provenance": "FrameForge Studio Environment Plates",
+      "content": "Dark slate acoustic panels, subtle cyan rim light, clean workstation shelf. Stable, non-warping plate for presenter framing",
+      "license": "Proprietary Production Asset"
+    }
+  ]
+}

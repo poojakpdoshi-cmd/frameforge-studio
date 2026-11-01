@@ -1,0 +1,51 @@
+{
+  "project": "Physical Intelligence \u03c00 (Pi-Zero) 45s Documentary Reel",
+  "topic": "Vision-Language-Action Flow Models for Generalist Robotics",
+  "verification_status": "VERIFIED_PRIMARY_TIER1",
+  "sources": [
+    {
+      "source_id": "SRC-001",
+      "type": "Primary Technical Paper",
+      "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+      "authors": [
+        "Kevin Black",
+        "Noah Brown",
+        "Danny Driess",
+        "Adnan Esmail",
+        "Chelsea Finn",
+        "Karol Hausman",
+        "Brian Ichter",
+        "Sergey Levine",
+        "Physical Intelligence Team"
+      ],
+      "institution": "Physical Intelligence (San Francisco, CA) with Stanford & UC Berkeley",
+      "publication_date": "2024-10-31",
+      "identifier": "arXiv:2410.24164 [cs.RO]",
+      "url": "https://arxiv.org/abs/2410.24164",
+      "pdf_url": "https://arxiv.org/pdf/2410.24164",
+      "core_contribution": "Flow Matching action expert coupled to PaliGemma VLM, enabling 50 Hz continuous dexterous multi-task robotic manipulation across 7 distinct embodiments.",
+      "evidence_used": "Model architecture topology, 50 Hz vs 3-5 Hz frequency benchmark, multi-embodiment co-training matrix"
+    },
+    {
+      "source_id": "SRC-002",
+      "type": "Official Demonstration Portal & Engineering Release",
+      "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+      "publisher": "Physical Intelligence",
+      "publication_date": "2024-10-31",
+      "url": "https://www.physicalintelligence.company/blog/pi0",
+      "core_contribution": "Video demonstrations showing end-to-end laundry folding from dryer to table, cardboard box folding, and table bussing.",
+      "evidence_used": "Empirical task sequences, multi-step dexterous manipulation of deformable cloth"
+    },
+    {
+      "source_id": "SRC-003",
+      "type": "Prior State-of-the-Art Baseline Reference",
+      "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+      "authors": ["Google DeepMind Robotics Team"],
+      "publication_date": "2023-07-28",
+      "identifier": "arXiv:2307.15818",
+      "url": "https://arxiv.org/abs/2307.15818",
+      "core_contribution": "Discretized tokenized action space (256 discrete bins) operating at 3-5 Hz.",
+      "evidence_used": "Comparative baseline illustrating the discrete tokenization bottleneck that \u03c00 overcomes"
+    }
+  ]
+}
