@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f111a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2b3147;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3c4461;
+  }
+}
+
+/* Studio custom utilities */
+.studio-glass {
+  background: rgba(15, 17, 26, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+.timeline-clip-selected {
+  outline: 2px solid #3b82f6;
+  outline-offset: -1px;
+}
